@@ -38,9 +38,17 @@ yarn-error.log*
 # vercel
 .vercel
 
+# complier
+.idea
+.vscode
+
 
 
 # typescript
 *.tsbuildinfo
 next-env.d.ts
 
+/dist/
+.vinext/
+.cloudflare/
+.wrangler/

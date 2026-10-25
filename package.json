@@ -4,22 +4,27 @@
   "private": true,
   "license": "MIT",
   "engines": {
-    "node": ">=24"
+    "node": ">=24.22.0"
   },
   "scripts": {
     "generate": "openui generate src/lib/library.ts --spec --out src/generated/spec.json",
     "generate:apiKey": "openui generate-api-key",
-    "prompt": "openui generate src/lib/library.ts --out src/generated/system-prompt.txt --prompt-options promptOptions && openui generate src/lib/library.ts --out src/generated/dashboard-system-prompt.txt --prompt-options dashboardPromptOptions && rm -f src/generated/*system-prompt.spec.json",
+    "prompt": "openui generate src/lib/library.ts --out src/generated/system-prompt.txt --prompt-options promptOptions && openui generate src/lib/library.ts --out src/generated/dashboard-system-prompt.txt --prompt-options dashboardPromptOptions && node scripts/clean-prompt-specs.mjs",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "bench": "node --no-warnings scripts/bench/run.mjs",
-    "deploy": "openui deploy"
+    "deploy": "openui deploy",
+    "dev:vinext": "vite dev --port 3001",
+    "build:vinext": "vite build",
+    "start:vinext": "vinext start",
+    "deploy:vinext": "vinext-cloudflare deploy"
   },
   "dependencies": {
     "@openuidev/lang-core": "^1.0.0",
+    "@openuidev/react-headless": "^0.18.1",
     "@openuidev/react-lang": "^1.0.0",
     "@openuidev/react-ui": "^0.18.1",
     "katex": "^0.16.47",
@@ -28,20 +33,31 @@
     "next": "^16.3.1",
     "openai": "^6.22.0",
     "posthog-js": "^1.438.10",
-    "react": "19.2.3",
-    "react-dom": "19.2.3",
-    "zod": "^4.4.3"
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "zod": "^4.4.3",
+    "zustand": "^4.5.7"
   },
   "devDependencies": {
+    "@cloudflare/vite-plugin": "^2.0.0-beta.v.4",
     "@openuidev/cli": "0.4.1",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@vinext/cloudflare": "^1.2.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "@vitejs/plugin-rsc": "^0.5.38",
+    "cf": "^1.0.0-beta.21",
+    "playwright-core": "^1.64.1",
+    "react-server-dom-webpack": "^19.3.1",
     "typescript": "^5",
+    "vinext": "^1.3.0",
+    "vite": "^8.3.5",
     "vitest": "^4.1.11"
   },
   "allowScripts": {
     "esbuild": true,
     "@openuidev/lang-core": false
-  }
+  },
+  "type": "module"
 }
