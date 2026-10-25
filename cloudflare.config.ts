@@ -2,7 +2,7 @@ import { bindings, defineConfig, defineWorker } from "cf/config";
 
 export default defineConfig({
   worker: defineWorker({
-    name: "open-intelligent-ui",
+    name: "intelligent-ui-react",
     entrypoint: "vinext/server/fetch-handler",
     compatibilityDate: "2026-10-25",
     compatibilityFlags: ["nodejs_compat"],
