@@ -30,14 +30,14 @@ if (typeof window !== "undefined") {
 }
 
 const starters = [
-  { displayText: "Plan a day out", prompt: "I'm in San Francisco for a day, plan a sightseeing route for me", icon: <MapPinned size={16} /> },
-  { displayText: "Explore a city", prompt: "Plan a relaxed afternoon exploring Lisbon, with three stops and a map", icon: <Compass size={16} /> },
-  { displayText: "Find weekend ideas", prompt: "Help me find a weekend getaway from San Francisco. Compare three destinations", icon: <TentTree size={16} /> },
-  { displayText: "Plan a meal", prompt: "Help me plan a simple vegetarian dinner for six people", icon: <UtensilsCrossed size={16} /> },
-  { displayText: "Build a calculator", prompt: "Build me a working calculator app with a display and keypad", icon: <Calculator size={16} /> },
-  { displayText: "Play on a Game Boy", prompt: "Make a playable Game Boy-style handheld game with a screen, D-pad and A/B buttons", icon: <Gamepad2 size={16} /> },
-  { displayText: "Jam on a drum pad", prompt: "Make a drum pad I can play, with a few pads and a beat counter", icon: <Drum size={16} /> },
-  { displayText: "Take a trivia quiz", prompt: "Quiz me with five fun trivia questions and keep score", icon: <Brain size={16} /> },
+  { displayText: "规划一日游", prompt: "我会在上海待一天，请帮我规划观光路线", icon: <MapPinned size={16} /> },
+  { displayText: "探索一座城市", prompt: "请规划一段轻松的洛杉矶半日游，安排三个停留点并附上地图", icon: <Compass size={16} /> },
+  { displayText: "寻找周末活动灵感", prompt: "请为我推荐从旧金山出发的周末短途目的地，并比较三个选择", icon: <TentTree size={16} /> },
+  { displayText: "规划一顿晚餐", prompt: "请为六个人安排一顿简单的素食晚餐", icon: <UtensilsCrossed size={16} /> },
+  { displayText: "制作一个计算器", prompt: "请制作一个带显示屏和按键、可以实际使用的计算器", icon: <Calculator size={16} /> },
+  { displayText: "玩一款掌机游戏", prompt: "请制作一款可以玩的 Game Boy 风格掌机游戏，包含屏幕、方向键和 A/B 按钮", icon: <Gamepad2 size={16} /> },
+  { displayText: "即兴演奏", prompt: "制作一个可供演奏的鼓垫，包含若干打击垫以及一个节拍计数器", icon: <Drum size={16} /> },
+  { displayText: "参加知识问答", prompt: "请用五道有趣的知识题考考我，并记录得分", icon: <Brain size={16} /> },
 ];
 
 const llm = fetchLLM({
@@ -73,7 +73,7 @@ export default function Home() {
         storage={storage}
         componentLibrary={library}
         onAction={onAction}
-        agentName="OpenUI"
+        agentName="Intelligent UI"
         logoUrl={withBase("/shiro-face.svg")}
         theme={{ mode }}
         starters={starters}
