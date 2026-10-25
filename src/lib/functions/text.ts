@@ -2,7 +2,7 @@ import { defineFunction } from "@openuidev/react-lang";
 import { z } from "zod/v4";
 import { list, MAX_ITEMS, read } from "./shared";
 
-const LOCALE = "en-US";
+const LOCALE = "zh-CN";
 
 function currencyCode(code: string | undefined): string {
   const upper = (code ?? "USD").toUpperCase();
@@ -72,7 +72,11 @@ export const Plural = defineFunction({
   description: 'Count and word: @Plural(1, "guest") is "1 guest", 3 gives "3 guests"; plural defaults to word + "s"',
   params: z.object({ n: z.number(), word: z.string(), plural: z.string().optional() }),
   returns: z.string(),
-  fn: ({ n, word, plural }) => `${format(n, { maximumFractionDigits: 2 })} ${Math.abs(n) === 1 ? word : (plural ?? `${word}s`)}`,
+  fn: ({ n, word, plural }) => {
+    const isChinese = /[\u3400-\u9fff]/u.test(word);
+    const form = Math.abs(n) === 1 || isChinese ? word : (plural ?? `${word}s`);
+    return `${format(n, { maximumFractionDigits: 2 })} ${form}`;
+  },
 });
 
 export const Pad = defineFunction({

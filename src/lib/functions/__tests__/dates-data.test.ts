@@ -8,14 +8,14 @@ const R = (expr: string) => value(expr.replaceAll("ROWS", rows));
 
 const cases: Record<string, [string, unknown][]> = {
   FormatDate: [
-    ['@FormatDate("2026-10-09")', "Oct 9, 2026"],
-    ['@FormatDate("2026-10-09", "short")', "Oct 9"],
-    ['@FormatDate("2026-10-09", "long")', "Friday, October 9, 2026"],
-    ['@FormatDate("2026-10-09", "weekday")', "Fri"],
-    ['@FormatDate("2026-10-09", "month")', "Oct 2026"],
+    ['@FormatDate("2026-10-09")', "2026年10月9日"],
+    ['@FormatDate("2026-10-09", "short")', "10月9日"],
+    ['@FormatDate("2026-10-09", "long")', "2026年10月9日星期五"],
+    ['@FormatDate("2026-10-09", "weekday")', "周五"],
+    ['@FormatDate("2026-10-09", "month")', "2026年10月"],
     ['@FormatDate("2026-10-09", "iso")', "2026-10-09"],
-    ['@FormatDate("2026-10-09T21:30:00Z", "time")', "9:30 PM"],
-    ['@FormatDate("2026-10-09T21:30:00Z", "datetime")', "Oct 9, 9:30 PM"],
+    ['@FormatDate("2026-10-09T21:30:00Z", "time")', "21:30"],
+    ['@FormatDate("2026-10-09T21:30:00Z", "datetime")', "10月9日 21:30"],
     ['@FormatDate(0, "iso")', "1970-01-01"],
     ['@FormatDate("2026-02-30")', null],
     ['@FormatDate("soon")', null],
@@ -143,7 +143,7 @@ describe("@Now", () => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date("2026-10-09T12:00:00Z"));
     expect(value("@Now()")).toBe("2026-10-09T12:00:00.000Z");
-    expect(value('@FormatDate(@AddDays(@Now(), 1), "short")')).toBe("Oct 10");
+    expect(value('@FormatDate(@AddDays(@Now(), 1), "short")')).toBe("10月10日");
   });
 });
 
@@ -158,7 +158,7 @@ describe("@Today", () => {
 describe("an invalid optional argument", () => {
   it("is dropped with an error, so its default applies", () => {
     const style = run('@FormatDate("2026-10-09", "fancy")');
-    expect(style.value).toBe("Oct 9, 2026");
+    expect(style.value).toBe("2026年10月9日");
     expect(style.parseErrors.join()).toMatch(/one of/);
     const how = run(`@GroupBy(${rows}, "region", "amount", "median")`);
     expect(how.value).toEqual([{ key: "West", value: 17 }, { key: "East", value: 5 }]);

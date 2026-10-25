@@ -64,7 +64,7 @@ export const FormatDate = defineFunction({
     if (style === "iso") return isoDay(day);
     // A calendar date formats in UTC so its day never shifts with the viewer's zone
     const at = instant ?? new Date(day * DAY);
-    return at.toLocaleString("en-US", { ...STYLES[style], ...(instant ? {} : { timeZone: "UTC" }) });
+    return at.toLocaleString("zh-CN", { ...STYLES[style], ...(instant ? {} : { timeZone: "UTC" }) });
   },
 });
 
