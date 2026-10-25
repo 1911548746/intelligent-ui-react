@@ -12,7 +12,7 @@ export function Preview({ theme }: { theme: "light" | "dark" }) {
   const [program, setProgram] = useState<string | null>(null);
   useEffect(() => setProgram((window as Bridge).__OPENUI_PROGRAM__ ?? ""), []);
 
-  // Errors and actions go on window for the script to read
+  // 将错误和动作写入 window，供评测脚本读取。
   const onError = useCallback((list: OpenUIError[]) => {
     (window as Bridge).__OPENUI_ERRORS__ = list.map((e) => `${e.code}: ${e.message}`);
   }, []);
@@ -28,7 +28,7 @@ export function Preview({ theme }: { theme: "light" | "dark" }) {
         {program === null ? null : program ? (
           <Renderer response={program} library={library} isStreaming={false} onAction={onAction} onError={onError} toolProvider={demoTools} />
         ) : (
-          <p>No program. Set window.__OPENUI_PROGRAM__ before the page loads.</p>
+          <p>没有可预览的程序。请在页面加载前设置 window.__OPENUI_PROGRAM__。</p>
         )}
       </main>
     </div>
