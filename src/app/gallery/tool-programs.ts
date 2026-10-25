@@ -13,41 +13,41 @@ const roast = `root = Col([head, dishes, planner, Grid([shopping, schedule], 2, 
 $guests = 6
 $got = []
 $done = []
-head = Col([Title("Sunday roast with friends", "xl"), Text("Rosemary and garlic lamb, golden potatoes and all the good things on the side. The shopping list grows with your guest list.", "md", "muted")], 2)
+head = Col([Title("和朋友一起享用周日烤肉", "xl"), Text("迷迭香蒜香羊肉、金黄土豆和美味配菜。购物清单会随用餐人数自动调整。", "md", "muted")], 2)
 dishes = Grid([d1, d2, d3], 3, 170, 3)
-d1 = Col([SearchImage("Lamb roast dinner", 1.4, "lg"), Text("Rosemary & garlic lamb", "sm", null, "semibold"), Caption("The centerpiece, with gravy and mint sauce")], 1)
-d2 = Col([SearchImage("Roast potato", 1.4, "lg"), Text("Extra-crispy potatoes", "sm", null, "semibold"), Caption("Fluffy inside, golden edges")], 1)
-d3 = Col([SearchImage("Apple crumble", 1.4, "lg"), Text("Bramley apple crumble", "sm", null, "semibold"), Caption("Warm, with custard or cream")], 1)
-planner = Card([Row([Col([Text("Guests", "sm", null, "semibold"), Caption("Quantities follow the guest count")], 0), Spacer(), IconButton("minus", @Set($guests, @Clamp($guests - 1, 2, 16)), "Fewer guests"), Title($guests + "", "lg"), IconButton("plus", @Set($guests, @Clamp($guests + 1, 2, 16)), "More guests")], 3)], "soft", 4)
+d1 = Col([SearchImage("烤羊肉晚餐", 1.4, "lg"), Text("迷迭香蒜香羊肉", "sm", null, "semibold"), Caption("主菜，搭配肉汁和薄荷酱")], 1)
+d2 = Col([SearchImage("Roast potato", 1.4, "lg"), Text("外脆里软的土豆", "sm", null, "semibold"), Caption("内里松软，边缘金黄")], 1)
+d3 = Col([SearchImage("Apple crumble", 1.4, "lg"), Text("布拉姆利苹果酥粒", "sm", null, "semibold"), Caption("趁热搭配蛋奶沙司或奶油")], 1)
+planner = Card([Row([Col([Text("用餐人数", "sm", null, "semibold"), Caption("用量随人数变化")], 0), Spacer(), IconButton("minus", @Set($guests, @Clamp($guests - 1, 2, 16)), "减少人数"), Title($guests + "", "lg"), IconButton("plus", @Set($guests, @Clamp($guests + 1, 2, 16)), "增加人数")], 3)], "soft", 4)
 lines = @Each(ingredients, "i", {name: i.name, amount: i.unit == "kg" ? @Format(i.qty * $guests / 6, "number", 1) + " kg" : i.unit == "g" ? @Format(@Round(i.qty * $guests / 300) * 50) + " g" : @Ceil(i.qty * $guests / 6) + ""})
-shopping = Card([Row([Title("Shopping list", "md"), Spacer(), Badge(@Count($got) + " of " + @Count(lines) + " in the basket", @Count($got) == @Count(lines) ? "success" : "neutral")], 2), Col(@Each(lines, "l", Pressable([Row([Icon(@Includes($got, l.name) ? "check-circle" : "circle", "sm", @Includes($got, l.name) ? "success" : "faint"), Text(l.name, "sm", null, null, false, @Includes($got, l.name)), Spacer(), Text(l.amount, "sm", "muted", "medium", false, false, true)], 2)], @Set($got, @Toggle($got, l.name)), @Includes($got, l.name), 2)), 1), Button("Copy shopping list", @CopyToClipboard("Sunday roast for " + $guests + "\\n" + @Join(@Each(lines, "l", "- " + l.amount + " " + l.name), "\\n")), "outline", null, "sm", "copy")], null, 4, 3)
-schedule = Card([Row([Title("Cooking plan", "md"), Spacer(), Text(@Count($done) + " of " + @Count(steps) + " done", "sm", "muted")], 2), Col(@Each(steps, "s", Pressable([Row([Icon(@Includes($done, s.title) ? "check-circle" : "circle", "sm", @Includes($done, s.title) ? "success" : "faint"), Col([Text(s.time + " · " + s.title, "sm", null, "semibold", false, @Includes($done, s.title)), Caption(s.description)], 0)], 3, "start")], @Set($done, @Toggle($done, s.title)), @Includes($done, s.title), 2)), 1), Button("Start over", @Reset($done, $got), "ghost", null, "sm", "rotate-ccw")], null, 4, 3)
-ingredients = [{name: "Bone-in leg of lamb", qty: 2.4, unit: "kg"}, {name: "Potatoes", qty: 1800, unit: "g"}, {name: "Carrots", qty: 9, unit: ""}, {name: "Parsnips", qty: 6, unit: ""}, {name: "Tenderstem broccoli", qty: 750, unit: "g"}, {name: "Apples for the crumble", qty: 5, unit: ""}, {name: "Bunches of rosemary", qty: 1, unit: ""}]
-steps = [{time: "Saturday", title: "Get ahead", description: "Make the crumble, marinate the lamb and set the table."}, {time: "12:30 PM", title: "Lamb in", description: "200°C for 20 minutes, then 180°C for about 25 minutes per 500 g."}, {time: "1:15 PM", title: "Potatoes in", description: "Parboil, rough up the edges and roast in hot fat."}, {time: "2:30 PM", title: "Rest and carve", description: "Rest the lamb for 20 minutes while the vegetables finish."}, {time: "3:00 PM", title: "Serve", description: "The crumble goes in as you sit down."}]`;
+shopping = Card([Row([Title("购物清单", "md"), Spacer(), Badge(@Count($got) + " / " + @Count(lines) + " 项已放入清单", @Count($got) == @Count(lines) ? "success" : "neutral")], 2), Col(@Each(lines, "l", Pressable([Row([Icon(@Includes($got, l.name) ? "check-circle" : "circle", "sm", @Includes($got, l.name) ? "success" : "faint"), Text(l.name, "sm", null, null, false, @Includes($got, l.name)), Spacer(), Text(l.amount, "sm", "muted", "medium", false, false, true)], 2)], @Set($got, @Toggle($got, l.name)), @Includes($got, l.name), 2)), 1), Button("复制购物清单", @CopyToClipboard("周日烤肉，用餐人数：" + $guests + "\\n" + @Join(@Each(lines, "l", "- " + l.amount + " " + l.name), "\\n")), "outline", null, "sm", "copy")], null, 4, 3)
+schedule = Card([Row([Title("烹饪计划", "md"), Spacer(), Text(@Count($done) + " / " + @Count(steps) + " 项已完成", "sm", "muted")], 2), Col(@Each(steps, "s", Pressable([Row([Icon(@Includes($done, s.title) ? "check-circle" : "circle", "sm", @Includes($done, s.title) ? "success" : "faint"), Col([Text(s.time + " · " + s.title, "sm", null, "semibold", false, @Includes($done, s.title)), Caption(s.description)], 0)], 3, "start")], @Set($done, @Toggle($done, s.title)), @Includes($done, s.title), 2)), 1), Button("重新开始", @Reset($done, $got), "ghost", null, "sm", "rotate-ccw")], null, 4, 3)
+ingredients = [{name: "带骨羊腿", qty: 2.4, unit: "kg"}, {name: "土豆", qty: 1800, unit: "g"}, {name: "胡萝卜", qty: 9, unit: ""}, {name: "欧洲防风草", qty: 6, unit: ""}, {name: "嫩茎西兰花", qty: 750, unit: "g"}, {name: "制作苹果酥所需的苹果", qty: 5, unit: ""}, {name: "束迷迭香", qty: 1, unit: ""}]
+steps = [{time: "周六", title: "提前准备", description: "制作苹果酥、腌制羊肉并摆好餐桌。"}, {time: "12:30", title: "放入羊肉", description: "先以 200°C 烤 20 分钟，再以 180°C 按每 500 克约 25 分钟烤制。"}, {time: "13:15", title: "放入土豆", description: "先煮熟，划破表面后放入热油中烤制。"}, {time: "14:30", title: "静置后切片", description: "羊肉静置 20 分钟，同时完成蔬菜烹饪。"}, {time: "15:00", title: "上桌", description: "入座时将苹果酥放入烤箱。"}]`;
 
 const bill = `root = Card([head, people, addPerson, Divider(), itemsHead, items, addItem, Divider(), rates, summary], null, 5, 4)
 $mode = "item"
-$people = ["You", "Alex", "Sam", "Jordan"]
-$items = [{name: "Burrata & sourdough", amount: 18, people: ["You", "Alex", "Sam", "Jordan"]}, {name: "Mains", amount: 96, people: ["You", "Alex", "Sam", "Jordan"]}, {name: "A bottle of red", amount: 42, people: ["You", "Alex", "Jordan"]}]
+$people = ["我", "小 Alex", "小 Sam", "小 Jordan"]
+$items = [{name: "布拉塔奶酪和酸面包", amount: 18, people: ["我", "小 Alex", "小 Sam", "小 Jordan"]}, {name: "主菜", amount: 96, people: ["我", "小 Alex", "小 Sam", "小 Jordan"]}, {name: "一瓶红酒", amount: 42, people: ["我", "小 Alex", "小 Jordan"]}]
 $name = ""
 $itemName = ""
 $itemAmount = null
 $tax = 8.5
 $tip = 20
-head = Row([Col([Title("The check, please", "lg"), Text($mode == "item" ? "Tap names on an item to say who shared it." : "Everyone pays the same share.", "sm", "muted")], 1), Spacer(), SegmentedControl($mode, [{value: "item", label: "By item"}, {value: "equal", label: "Equally"}])], 3, null, null, true)
+head = Row([Col([Title("请结账", "lg"), Text($mode == "item" ? "点击项目下方的姓名，选择共同分摊的人。" : "每个人支付相同份额。", "sm", "muted")], 1), Spacer(), SegmentedControl($mode, [{value: "item", label: "按项目"}, {value: "equal", label: "平均分摊"}])], 3, null, null, true)
 people = Row(@Each($people, "p", Button(p, Action([@Set($people, @Remove($people, "", p)), @Set($items, @Each($items, "it", {name: it.name, amount: it.amount, people: @Remove(it.people, "", p)}))]), "soft", null, "sm", "x")), 2, null, null, true)
-addPerson = Row([Input($name, null, "text", "Add a person"), Button("Add", Action([@Set($people, @Append($people, $name)), @Set($items, @Each($items, "it", {name: it.name, amount: it.amount, people: @Append(it.people, $name)})), @Reset($name)]), "outline", null, null, "user-plus", $name == "" || @Includes($people, $name))], 2)
-itemsHead = Row([Title("Items", "md"), Spacer(), Text(@Format(subtotal, "currency"), "sm", "muted", "medium", false, false, true)])
-items = Col(@Each($items, "it", Card([Row([Text(it.name, "sm", null, "semibold"), Spacer(), Text(@Format(it.amount, "currency"), "sm", null, "medium", false, false, true), IconButton("trash-2", @Set($items, @Remove($items, "name", it.name)), "Remove " + it.name, "ghost")], 2), $mode == "item" ? Row(@Each($people, "p", Button(p, @Set($items, @Update($items, "name", it.name, "people", @Toggle(it.people, p))), @Includes(it.people, p) ? "solid" : "outline", null, "sm", @Includes(it.people, p) ? "check" : null)), 1, null, null, true) : null], null, 3, 2)), 2)
-addItem = Row([Input($itemName, null, "text", "Item"), Input($itemAmount, null, "number", "Price"), Button("Add item", Action([@Set($items, @Append($items, {name: $itemName, amount: $itemAmount, people: $people})), @Reset($itemName, $itemAmount)]), "outline", null, null, "plus", $itemName == "" || $itemAmount <= 0)], 2)
-rates = Grid([Slider($tax, 0, 15, 0.5, "Tax", "%"), Slider($tip, 0, 30, 1, "Tip", "%")], 2, 220, 6)
+addPerson = Row([Input($name, null, "text", "添加用餐人"), Button("添加", Action([@Set($people, @Append($people, $name)), @Set($items, @Each($items, "it", {name: it.name, amount: it.amount, people: @Append(it.people, $name)})), @Reset($name)]), "outline", null, null, "user-plus", $name == "" || @Includes($people, $name))], 2)
+itemsHead = Row([Title("项目", "md"), Spacer(), Text(@Format(subtotal, "currency"), "sm", "muted", "medium", false, false, true)])
+items = Col(@Each($items, "it", Card([Row([Text(it.name, "sm", null, "semibold"), Spacer(), Text(@Format(it.amount, "currency"), "sm", null, "medium", false, false, true), IconButton("trash-2", @Set($items, @Remove($items, "name", it.name)), "移除 " + it.name, "ghost")], 2), $mode == "item" ? Row(@Each($people, "p", Button(p, @Set($items, @Update($items, "name", it.name, "people", @Toggle(it.people, p))), @Includes(it.people, p) ? "solid" : "outline", null, "sm", @Includes(it.people, p) ? "check" : null)), 1, null, null, true) : null], null, 3, 2)), 2)
+addItem = Row([Input($itemName, null, "text", "项目"), Input($itemAmount, null, "number", "价格"), Button("添加项目", Action([@Set($items, @Append($items, {name: $itemName, amount: $itemAmount, people: $people})), @Reset($itemName, $itemAmount)]), "outline", null, null, "plus", $itemName == "" || $itemAmount <= 0)], 2)
+rates = Grid([Slider($tax, 0, 15, 0.5, "税费", "%"), Slider($tip, 0, 30, 1, "小费", "%")], 2, 220, 6)
 subtotal = @Sum($items.amount)
 factor = 1 + ($tax + $tip) / 100
 unassigned = $mode == "equal" ? 0 : @Sum(@Each($items, "it", @Count(it.people) == 0 ? it.amount : 0))
 raw = @Each($people, "p", factor * ($mode == "equal" ? subtotal / @Max([@Count($people), 1]) : @Sum(@Each($items, "it", @Includes(it.people, p) ? it.amount / @Count(it.people) : 0))))
 cents = @Sum(raw) > 0 ? @Allocate(@Round(@Sum(raw), 2), raw) : raw
 shares = @Each(@Range(0, @Count($people)), "i", {name: $people[i], amount: cents[i]})
-summary = Card([Col(@Each(shares, "s", Row([Text(s.name), Spacer(), Text(@Format(s.amount, "currency"), null, null, "semibold", false, false, true)])), 2), Divider(), Row([Text("Total with tax and tip", "sm", "muted"), Spacer(), Title(@Format(subtotal * factor, "currency"), "lg")]), unassigned > 0 ? Text(@Format(unassigned, "currency") + " is not assigned to anyone yet.", "xs", "warning") : null, Button("Copy the split", @CopyToClipboard(@Join(@Each(shares, "s", s.name + ": " + @Format(s.amount, "currency")), "\\n")), "solid", null, "sm", "copy")], "soft", 4, 3)`;
+summary = Card([Col(@Each(shares, "s", Row([Text(s.name), Spacer(), Text(@Format(s.amount, "currency"), null, null, "semibold", false, false, true)])), 2), Divider(), Row([Text("含税费和小费总额", "sm", "muted"), Spacer(), Title(@Format(subtotal * factor, "currency"), "lg")]), unassigned > 0 ? Text(@Format(unassigned, "currency") + " 尚未分配给任何人。", "xs", "warning") : null, Button("复制分账结果", @CopyToClipboard(@Join(@Each(shares, "s", s.name + ": " + @Format(s.amount, "currency")), "\\n")), "solid", null, "sm", "copy")], "soft", 4, 3)`;
 
 const monty = `root = Card([head, doors, status, actions, record, sim], null, 5, 4)
 $choice = -1
@@ -60,219 +60,219 @@ $stayed = 0
 $stayWins = 0
 $simStay = 0
 $simGames = 0
-head = Col([Title("Should you switch doors?", "lg"), Text("One car. Two goats. A surprisingly good reason to switch.", "sm", "muted")], 1)
-doors = Grid(@Each(@Range(0, 3), "d", Pressable([Col([Text("Door " + (d + 1), "sm", "muted", "medium"), Title(d == $opened || $final >= 0 ? (d == $prize ? "🚗" : "🐐") : "🚪", "3xl"), Text(d == $choice ? "Your pick" : d == $opened ? "Opened by the host" : "Closed", "xs", d == $choice ? "info" : "muted", "medium")], 1, "center")], $choice < 0 ? Action([@Set($choice, d), @Set($prize, @Random(0, 2, true)), @Set($opened, $prize == d ? (d + 1 + @Random(0, 1, true)) % 3 : 3 - d - $prize)]) : null, d == $choice, 5, d == $opened || $final >= 0 ? "surface" : "warning", "lg")), 3, null, 3)
-status = Box([Title($final >= 0 ? ($final == $prize ? "You found the car!" : "A goat this time.") : $choice >= 0 ? "Door " + ($opened + 1) + " has a goat." : "Start by choosing a door.", "md"), Text($final >= 0 ? "Switching wins whenever your first pick was a goat: 2 out of 3 times." : $choice >= 0 ? "Your door still has a 1 in 3 chance. The other closed door has 2 in 3. Switch or stay?" : "The host knows where the car is and will open another door with a goat behind it.", "sm", "muted")], null, 1, 4, "info", "lg")
-actions = Row([$choice >= 0 && $final < 0 ? Button("Switch doors", Action([@Set($final, 3 - $choice - $opened), @Set($switched, $switched + 1), @Set($switchWins, $switchWins + ($final == $prize ? 1 : 0))]), "solid", null, null, "shuffle") : null, $choice >= 0 && $final < 0 ? Button("Keep my door", Action([@Set($final, $choice), @Set($stayed, $stayed + 1), @Set($stayWins, $stayWins + ($final == $prize ? 1 : 0))]), "outline") : null, $final >= 0 ? Button("Play again", @Reset($choice, $opened, $final), "solid", null, null, "rotate-ccw") : null, Button("Simulate 1,000 games", Action([@Set($simStay, $simStay + @Count(@Filter(@Each(@Range(0, 1000), "g", @Random(0, 2, true) == @Random(0, 2, true)), "", "==", true))), @Set($simGames, $simGames + 1000)]), "ghost", null, null, "dices")], 2, null, null, true)
-record = $switched + $stayed > 0 ? Text("Your games: switched " + @Plural($switched, "time") + " and won " + $switchWins + "; stayed " + @Plural($stayed, "time") + " and won " + $stayWins + ".", "sm", "muted") : null
-sim = $simGames > 0 ? Card([Row([Title("Simulated games", "sm"), Spacer(), Caption(@Format($simGames) + " games")]), Chart("bar", [{strategy: "Stay", wins: @Percent($simStay, $simGames)}, {strategy: "Switch", wins: 100 - @Percent($simStay, $simGames)}], "strategy", ["wins"], "percent", null, false, 160)], "soft", 4, 2) : null`;
+head = Col([Title("你应该换门吗？", "lg"), Text("一辆汽车，两只山羊。换门有一个出人意料的充分理由。", "sm", "muted")], 1)
+doors = Grid(@Each(@Range(0, 3), "d", Pressable([Col([Text("第 " + (d + 1), "sm", "muted", "medium"), Title(d == $opened || $final >= 0 ? (d == $prize ? "🚗" : "🐐") : "🚪", "3xl"), Text(d == $choice ? "你的选择" : d == $opened ? "主持人打开的门" : "未打开", "xs", d == $choice ? "info" : "muted", "medium")], 1, "center")], $choice < 0 ? Action([@Set($choice, d), @Set($prize, @Random(0, 2, true)), @Set($opened, $prize == d ? (d + 1 + @Random(0, 1, true)) % 3 : 3 - d - $prize)]) : null, d == $choice, 5, d == $opened || $final >= 0 ? "surface" : "warning", "lg")), 3, null, 3)
+status = Box([Title($final >= 0 ? ($final == $prize ? "你找到了汽车！" : "这次是山羊。") : $choice >= 0 ? "第 " + ($opened + 1) + " 后面是山羊。" : "请先选择一扇门。", "md"), Text($final >= 0 ? "如果第一次选到的是山羊，换门就能获胜，概率为 2/3。" : $choice >= 0 ? "当前这扇门仍有 1/3 的概率，另一扇未打开的门有 2/3。要换门还是坚持？" : "主持人知道汽车的位置，并会打开另一扇有山羊的门。", "sm", "muted")], null, 1, 4, "info", "lg")
+actions = Row([$choice >= 0 && $final < 0 ? Button("换门", Action([@Set($final, 3 - $choice - $opened), @Set($switched, $switched + 1), @Set($switchWins, $switchWins + ($final == $prize ? 1 : 0))]), "solid", null, null, "shuffle") : null, $choice >= 0 && $final < 0 ? Button("坚持当前选择", Action([@Set($final, $choice), @Set($stayed, $stayed + 1), @Set($stayWins, $stayWins + ($final == $prize ? 1 : 0))]), "outline") : null, $final >= 0 ? Button("再玩一次", @Reset($choice, $opened, $final), "solid", null, null, "rotate-ccw") : null, Button("模拟 1,000 局", Action([@Set($simStay, $simStay + @Count(@Filter(@Each(@Range(0, 1000), "g", @Random(0, 2, true) == @Random(0, 2, true)), "", "==", true))), @Set($simGames, $simGames + 1000)]), "ghost", null, null, "dices")], 2, null, null, true)
+record = $switched + $stayed > 0 ? Text("你的游戏：换门 " + $switched + " 局，赢了 " + $switchWins + "；坚持 " + $stayed + " 局，赢了 " + $stayWins + "。", "sm", "muted") : null
+sim = $simGames > 0 ? Card([Row([Title("模拟游戏", "sm"), Spacer(), Caption(@Format($simGames) + " 局")]), Chart("bar", [{strategy: "坚持", wins: @Percent($simStay, $simGames)}, {strategy: "换门", wins: 100 - @Percent($simStay, $simGames)}], "strategy", ["wins"], "percent", null, false, 160)], "soft", 4, 2) : null`;
 
-const savings = `root = Card([head, kpis, chart, milestone, controls, Text("Assumes monthly compounding and contributions at the end of each month. Returns are not guaranteed; this is an illustration, not advice.", "xs", "muted")], null, 5, 4)
+const savings = `root = Card([head, kpis, chart, milestone, controls, Text("假设按月复利，并在每月月底投入。收益并无保证；此内容仅作示意，不构成建议。", "xs", "muted")], null, 5, 4)
 $initial = 10000
 $monthly = 500
 $years = 30
 $rate = 5
-head = Row([Col([Title("Retirement savings", "lg"), Text("Turn today's contributions into a picture of tomorrow.", "sm", "muted")], 1), Spacer(), Button("Reset", @Reset($initial, $monthly, $years, $rate), "ghost", null, "sm", "rotate-ccw")], 3, "start")
-rows = @Each(@Range(0, $years + 1), "y", {year: "Year " + y, Contributions: $initial + $monthly * 12 * y, Balance: $rate == 0 ? $initial + $monthly * 12 * y : $initial * @Pow(1 + $rate / 1200, 12 * y) + $monthly * (@Pow(1 + $rate / 1200, 12 * y) - 1) / ($rate / 1200)})
+head = Row([Col([Title("退休储蓄", "lg"), Text("把今天的投入变成明天的规划。", "sm", "muted")], 1), Spacer(), Button("重置", @Reset($initial, $monthly, $years, $rate), "ghost", null, "sm", "rotate-ccw")], 3, "start")
+rows = @Each(@Range(0, $years + 1), "y", {year: "第 " + y, contributions: $initial + $monthly * 12 * y, balance: $rate == 0 ? $initial + $monthly * 12 * y : $initial * @Pow(1 + $rate / 1200, 12 * y) + $monthly * (@Pow(1 + $rate / 1200, 12 * y) - 1) / ($rate / 1200)})
 final = @Last(rows)
-million = @First(@Filter(rows, "Balance", ">=", 1000000))
+million = @First(@Filter(rows, "balance", ">=", 1000000))
 kpis = Grid([k1, k2, k3], 3, 150, 3)
-k1 = Card([Caption("Balance in " + @Plural($years, "year")), Title(@Format(final.Balance, "currency", 0), "xl")], "soft", 3, 1)
-k2 = Card([Caption("You put in"), Title(@Format(final.Contributions, "currency", 0), "xl")], "soft", 3, 1)
-k3 = Card([Caption("Growth"), Title(@Format(final.Balance - final.Contributions, "currency", 0), "xl", "success")], "soft", 3, 1)
-chart = Chart("area", rows, "year", ["Contributions", "Balance"], "currency")
-milestone = Row([Icon(million == null ? "hourglass" : "party-popper", "sm", million == null ? "muted" : "success"), Text(million == null ? "At this pace the balance stays under $1 million." : "You pass **$1 million** in " + million.year + ", " + @Format(@Percent(million.Balance - million.Contributions, million.Balance), "percent", 0) + " of it from growth.", "sm")], 2)
-controls = Grid([Slider($initial, 0, 200000, 1000, "Starting balance", "$"), Slider($monthly, 0, 5000, 50, "Monthly contribution", "$"), Slider($years, 1, 50, 1, "Years", " yrs"), Slider($rate, 0, 12, 0.5, "Annual return", "%")], 2, 240, 6)`;
+k1 = Card([Caption("余额（" + $years + " 年）"), Title(@Format(final.balance, "currency", 0), "xl")], "soft", 3, 1)
+k2 = Card([Caption("投入金额"), Title(@Format(final.contributions, "currency", 0), "xl")], "soft", 3, 1)
+k3 = Card([Caption("增长"), Title(@Format(final.balance - final.contributions, "currency", 0), "xl", "success")], "soft", 3, 1)
+chart = Chart("area", rows, "year", ["contributions", "balance"], "currency")
+milestone = Row([Icon(million == null ? "hourglass" : "party-popper", "sm", million == null ? "muted" : "success"), Text(million == null ? "按当前节奏，余额不会达到 100 万美元。" : "你将在第 " + million.year + " 年达到 100 万美元，其中 " + @Format(@Percent(million.balance - million.contributions, million.balance), "percent", 0) + " 来自投资增长。", "sm")], 2)
+controls = Grid([Slider($initial, 0, 200000, 1000, "起始余额", "$"), Slider($monthly, 0, 5000, 50, "每月投入", "$"), Slider($years, 1, 50, 1, "年数", " 年"), Slider($rate, 0, 12, 0.5, "年收益率", "%")], 2, 240, 6)`;
 
-const gdp = `root = Card([head, Caption("Total output"), total, bar, legend, note, sliders, Row([Button("Reset economy", @Reset($c, $i, $g, $x), "ghost", null, "sm", "rotate-ccw"), Spacer(), Badge("GDP = C + I + G + (X − M)", "purple")], 2, null, null, true), Text("GDP counts the value of final goods and services produced within a country. Imports are subtracted because they were produced elsewhere.", "sm", "muted"), quiz], null, 5, 4)
+const gdp = `root = Card([head, Caption("总产出"), total, bar, legend, note, sliders, Row([Button("重置经济指标", @Reset($c, $i, $g, $x), "ghost", null, "sm", "rotate-ccw"), Spacer(), Badge("GDP = C + I + G + (X − M)", "purple")], 2, null, null, true), Text("GDP 统计一个国家境内生产的最终商品和服务价值。进口品在其他国家生产，因此需要扣除。", "sm", "muted"), quiz], null, 5, 4)
 $c = 600
 $i = 200
 $g = 170
 $x = 30
 $answer = ""
 gdp = $c + $i + $g + $x
-parts = [{label: "Consumer spending", value: $c, color: "chart1"}, {label: "Business investment", value: $i, color: "chart2"}, {label: "Government spending", value: $g, color: "chart4"}, {label: "Net exports", value: $x, color: "chart3"}]
-head = Row([Col([Title("What makes up GDP?", "lg"), Text("An economy, in four parts.", "sm", "muted")], 1), Spacer(), Badge("Illustrative economy")], 3, "start")
-total = Title("$" + @Format(gdp / 1000, "number", 2) + " trillion", "2xl")
+parts = [{label: "消费支出", value: $c, color: "chart1"}, {label: "企业投资", value: $i, color: "chart2"}, {label: "政府支出", value: $g, color: "chart4"}, {label: "净出口", value: $x, color: "chart3"}]
+head = Row([Col([Title("GDP 由什么构成？", "lg"), Text("由四部分构成的经济体。", "sm", "muted")], 1), Spacer(), Badge("示意经济体")], 3, "start")
+total = Title("$" + @Format(gdp / 1000, "number", 2) + " 万亿美元", "2xl")
 bar = Box(@Each(parts, "p", Box([p.value >= 80 ? Text("$" + p.value + "B", "xs", "#ffffff", "medium") : null], null, null, null, p.color, 0, null, null, "100%", @Max([p.value, 0]), "center", "center")), "row", 0.5, null, null, "md", null, "100%", 38)
 legend = Grid(@Each(parts, "p", Row([Box([], null, null, null, p.color, "full", null, 10, 10), Text(p.label, "sm"), Spacer(), Text((p.value < 0 ? "-$" : "$") + @Format(@Abs(p.value)) + "B", "sm", "muted", "medium", false, false, true)], 2)), 2, 220, 2)
-note = $x < 0 ? Text("Positive contributions add up to $" + ($c + $i + $g) + "B. Net imports subtract $" + @Abs($x) + "B, leaving $" + gdp + "B of output.", "sm", "warning") : null
-sliders = Grid([Slider($c, 0, 1200, 10, "Consumer spending, $ billions"), Slider($i, 0, 600, 10, "Business investment, $ billions"), Slider($g, 0, 500, 10, "Government spending, $ billions"), Slider($x, -200, 300, 10, "Net exports, $ billions")], 2, 240, 6)
-quiz = Card([RadioGroup($answer, [{value: "a", label: "Real GDP increases by 10%"}, {value: "b", label: "Nominal GDP rises; real GDP is unchanged"}, {value: "c", label: "Both measures stay the same"}], "The same goods cost 10% more this year. What changes?"), $answer == "" ? null : Text(($answer == "b" ? "**Correct.** " : "**Not quite.** ") + "Real GDP adjusts for price changes, so higher prices alone raise nominal GDP but not real output.", "sm")], "soft", 4, 2)`;
+note = $x < 0 ? Text("正向贡献合计为 $" + ($c + $i + $g) + "B。净进口扣除 $" + @Abs($x) + "B，最终产出为 $" + gdp + "B。", "sm", "warning") : null
+sliders = Grid([Slider($c, 0, 1200, 10, "消费支出（十亿美元）"), Slider($i, 0, 600, 10, "企业投资（十亿美元）"), Slider($g, 0, 500, 10, "政府支出（十亿美元）"), Slider($x, -200, 300, 10, "净出口（十亿美元）")], 2, 240, 6)
+quiz = Card([RadioGroup($answer, [{value: "a", label: "实际 GDP 增长 10%"}, {value: "b", label: "名义 GDP 上升，实际 GDP 不变"}, {value: "c", label: "两个指标都不变"}], "同样的商品今年贵了 10%，什么会发生变化？"), $answer == "" ? null : Text(($answer == "b" ? "**回答正确。** " : "**还不完全正确。") + "实际 GDP 会剔除价格变化，因此单纯涨价只会提高名义 GDP，不会提高实际产出。", "sm")], "soft", 4, 2)`;
 
-const clt = `root = Card([head, SegmentedControl($dist, ["Skewed", "Uniform", "Bimodal"]), Grid([popCard, meanCard], 2, 260, 4), Slider($n, 1, 50, 1, "Values per sample"), buttons, stats, Text("As the sample size grows, the averages of samples pile up in a bell shape around the population mean, even when the population itself is skewed.", "sm", "muted"), quiz], null, 5, 4)
-$dist = "Skewed"
+const clt = `root = Card([head, SegmentedControl($dist, ["偏态分布", "均匀分布", "双峰分布"]), Grid([popCard, meanCard], 2, 260, 4), Slider($n, 1, 50, 1, "每个样本的数值数量"), buttons, stats, Text("随着样本量增大，即使总体分布偏斜，各样本的平均值也会围绕总体均值聚成钟形。", "sm", "muted"), quiz], null, 5, 4)
+$dist = "偏态分布"
 $n = 5
 $means = []
 $answer = ""
-head = Col([Title("The central limit theorem", "lg"), Text("Different populations. The same bell-shaped pattern.", "sm", "muted")], 1)
-pop = @Each(@Range(0.0025, 1, 0.005), "u", $dist == "Skewed" ? @Pow(u, 3) : $dist == "Uniform" ? u : (u < 0.5 ? 0.05 + 0.4 * u : 0.55 + 0.4 * u))
+head = Col([Title("中心极限定理", "lg"), Text("总体各不相同，钟形规律相同。", "sm", "muted")], 1)
+pop = @Each(@Range(0.0025, 1, 0.005), "u", $dist == "偏态分布" ? @Pow(u, 3) : $dist == "均匀分布" ? u : (u < 0.5 ? 0.05 + 0.4 * u : 0.55 + 0.4 * u))
 current = @Filter(@Filter($means, "dist", "==", $dist), "n", "==", $n).mean
-draw = @Each(@Range(0, 100), "s", {dist: $dist, n: $n, mean: @Avg(@Each(@Each(@Range(0, $n), "k", @Random(0, 1)), "u", $dist == "Skewed" ? @Pow(u, 3) : $dist == "Uniform" ? u : (u < 0.5 ? 0.05 + 0.4 * u : 0.55 + 0.4 * u)))})
-popCard = Col([Title("Population", "sm"), Caption("The values we draw from"), Chart("bar", @Histogram(pop, 20, 0, 1), "key", ["value"], null, null, false, 150)], 1)
-meanCard = Col([Title("Sample means", "sm"), Caption("The average of each sample of " + $n), @Count(current) == 0 ? Box([Text("Draw samples to see the pattern", "sm", "muted")], null, null, 6, "surface", "lg", true, "100%", 150, null, "center", "center") : Chart("bar", @Histogram(current, 20, 0, 1), "key", ["value"], null, null, false, 150)], 1)
-buttons = Row([Button("Draw 100 samples", @Set($means, @Take(@Concat($means, draw), -6000)), "solid", null, null, "dices"), Button("Draw 500", Action([@Set($means, @Take(@Concat($means, draw), -6000)), @Set($means, @Take(@Concat($means, draw), -6000)), @Set($means, @Take(@Concat($means, draw), -6000)), @Set($means, @Take(@Concat($means, draw), -6000)), @Set($means, @Take(@Concat($means, draw), -6000))]), "outline"), Button("Reset", @Reset($means), "ghost", null, null, "rotate-ccw")], 2, null, null, true)
+draw = @Each(@Range(0, 100), "s", {dist: $dist, n: $n, mean: @Avg(@Each(@Each(@Range(0, $n), "k", @Random(0, 1)), "u", $dist == "偏态分布" ? @Pow(u, 3) : $dist == "均匀分布" ? u : (u < 0.5 ? 0.05 + 0.4 * u : 0.55 + 0.4 * u)))})
+popCard = Col([Title("总体", "sm"), Caption("抽样来源的数值"), Chart("bar", @Histogram(pop, 20, 0, 1), "key", ["value"], null, null, false, 150)], 1)
+meanCard = Col([Title("样本均值", "sm"), Caption("每个样本包含 " + $n), @Count(current) == 0 ? Box([Text("抽取样本以查看分布", "sm", "muted")], null, null, 6, "surface", "lg", true, "100%", 150, null, "center", "center") : Chart("bar", @Histogram(current, 20, 0, 1), "key", ["value"], null, null, false, 150)], 1)
+buttons = Row([Button("抽取 100 个样本", @Set($means, @Take(@Concat($means, draw), -6000)), "solid", null, null, "dices"), Button("抽取 500 个样本", Action([@Set($means, @Take(@Concat($means, draw), -6000)), @Set($means, @Take(@Concat($means, draw), -6000)), @Set($means, @Take(@Concat($means, draw), -6000)), @Set($means, @Take(@Concat($means, draw), -6000)), @Set($means, @Take(@Concat($means, draw), -6000))]), "outline"), Button("重置", @Reset($means), "ghost", null, null, "rotate-ccw")], 2, null, null, true)
 stats = Grid([s1, s2, s3], 3, 140, 3)
-s1 = Card([Caption("Samples"), Title(@Format(@Count(current)), "xl")], "soft", 3, 1)
-s2 = Card([Caption("Mean of the means"), Title(@Count(current) == 0 ? "-" : @Format(@Stats(current).mean, "number", 3), "xl"), Caption("Population: " + @Format(@Stats(pop).mean, "number", 3))], "soft", 3, 1)
-s3 = Card([Caption("Spread of the means"), Title(@Count(current) == 0 ? "-" : @Format(@Stats(current).stdev, "number", 3), "xl"), Caption("Theory, σ/√n: " + @Format(@Stats(pop).stdev / @Sqrt($n), "number", 3))], "soft", 3, 1)
-quiz = Card([RadioGroup($answer, [{value: "a", label: "The population becomes normal"}, {value: "b", label: "The sample means form a narrower bell shape"}, {value: "c", label: "Every mean becomes exactly the same"}], "What changes when the sample size grows?"), $answer == "" ? null : Text(($answer == "b" ? "**Correct.** " : "**Not quite.** ") + "The population stays the same. The means become more normal and their spread shrinks like 1/√n.", "sm")], "soft", 4, 2)`;
+s1 = Card([Caption("样本数"), Title(@Format(@Count(current)), "xl")], "soft", 3, 1)
+s2 = Card([Caption("样本均值的平均数"), Title(@Count(current) == 0 ? "-" : @Format(@Stats(current).mean, "number", 3), "xl"), Caption("总体：" + @Format(@Stats(pop).mean, "number", 3))], "soft", 3, 1)
+s3 = Card([Caption("样本均值的离散程度"), Title(@Count(current) == 0 ? "-" : @Format(@Stats(current).stdev, "number", 3), "xl"), Caption("理论值，σ/√n：" + @Format(@Stats(pop).stdev / @Sqrt($n), "number", 3))], "soft", 3, 1)
+quiz = Card([RadioGroup($answer, [{value: "a", label: "总体变为正态分布"}, {value: "b", label: "样本均值形成更窄的钟形分布"}, {value: "c", label: "每个均值完全相同"}], "样本量增大时会发生什么？"), $answer == "" ? null : Text(($answer == "b" ? "**回答正确。** " : "**还不完全正确。") + "总体保持不变。样本均值更接近正态分布，离散程度按 1/√n 缩小。", "sm")], "soft", 4, 2)`;
 
 const sales = `root = Col([head, kpis, Grid([trend, mix], 2, 300, 4), Grid([regions, top], 2, 300, 4)], 4)
 $days = "90"
-$channel = "All"
-$view = "Weekly"
+$channel = "全部"
+$view = "每周"
 orders = Query("get_orders", {days: $days}, {rows: []}, 300)
-rows = $channel == "All" ? orders.rows : @Filter(orders.rows, "channel", "==", $channel)
+rows = $channel == "全部" ? orders.rows : @Filter(orders.rows, "channel", "==", $channel)
 weekly = @Bucket(rows, "date", "week", "amount")
 daily = @Bucket(rows, "date", "day", "amount")
 last7 = @Sum(@Take(daily, -7).value)
 prev7 = @Sum(@Slice(daily, -14, -7).value)
 change = @Change(last7, prev7)
-head = Row([Col([Title("Store performance", "lg"), Caption("Demo data, refreshed every 5 minutes")], 1), Spacer(), Box([Select($channel, [{value: "All", label: "All channels"}, "Web", "Mobile", "Retail"])], null, null, null, null, null, null, 150), SegmentedControl($days, [{value: "30", label: "30d"}, {value: "90", label: "90d"}, {value: "365", label: "1y"}])], 3, null, null, true)
+head = Row([Col([Title("商店经营情况", "lg"), Caption("演示数据，每 5 分钟刷新")], 1), Spacer(), Box([Select($channel, [{value: "全部", label: "全部渠道"}, "网页", "移动端", "线下门店"])], null, null, null, null, null, null, 150), SegmentedControl($days, [{value: "30", label: "30d"}, {value: "90", label: "90d"}, {value: "365", label: "1y"}])], 3, null, null, true)
 kpis = Grid([k1, k2, k3, k4], 4, 150, 3)
-k1 = Card([Caption("Revenue"), Title(@Format(@Sum(rows.amount), "compact", 1, "USD"), "xl")], null, 3, 1)
-k2 = Card([Caption("Orders"), Title(@Format(@Count(rows)), "xl")], null, 3, 1)
-k3 = Card([Caption("Average order"), Title(@Format(@Avg(rows.amount), "currency"), "xl")], null, 3, 1)
-k4 = Card([Caption("Last 7 days"), Row([Title(@Format(last7, "compact", 1, "USD"), "xl"), change == null ? null : Badge((change >= 0 ? "+" : "") + @Format(change, "percent", 1) + " vs prior 7", change >= 0 ? "success" : "danger")], 2, null, null, true)], null, 3, 1)
-trend = Card([Row([Title("Revenue", "sm"), Spacer(), SegmentedControl($view, ["Weekly", "Cumulative"])], 2), Chart("area", $view == "Weekly" ? weekly : @Cumulative(weekly, "value"), "key", ["value"], "currency")], null, 4, 2)
-mix = Card([Title("Channel mix", "sm"), Chart("donut", @GroupBy(orders.rows, "channel", "amount"), "key", ["value"], "currency")], null, 4, 2)
-regions = Card([Title("Revenue by region and category", "sm"), Chart("bar", @Pivot(rows, "region", "category", "amount"), "key", null, "currency", null, true)], null, 4, 2)
-top = Card([Title("Top products", "sm"), Table(["Product", "Units", "Revenue"], @Each(@Top(@GroupBy(rows, "product", "amount"), "value", 5), "p", [p.key, @Sum(@Filter(rows, "product", "==", p.key).units), @Format(p.value, "currency", 0)]))], null, 4, 2)`;
+k1 = Card([Caption("销售额"), Title(@Format(@Sum(rows.amount), "compact", 1, "USD"), "xl")], null, 3, 1)
+k2 = Card([Caption("订单数"), Title(@Format(@Count(rows)), "xl")], null, 3, 1)
+k3 = Card([Caption("平均订单金额"), Title(@Format(@Avg(rows.amount), "currency"), "xl")], null, 3, 1)
+k4 = Card([Caption("最近 7 天"), Row([Title(@Format(last7, "compact", 1, "USD"), "xl"), change == null ? null : Badge((change >= 0 ? "+" : "") + @Format(change, "percent", 1) + "，对比前 7 天", change >= 0 ? "success" : "danger")], 2, null, null, true)], null, 3, 1)
+trend = Card([Row([Title("销售额", "sm"), Spacer(), SegmentedControl($view, ["每周", "累计"])], 2), Chart("area", $view == "每周" ? weekly : @Cumulative(weekly, "value"), "key", ["value"], "currency")], null, 4, 2)
+mix = Card([Title("渠道构成", "sm"), Chart("donut", @GroupBy(orders.rows, "channel", "amount"), "key", ["value"], "currency")], null, 4, 2)
+regions = Card([Title("按地区和品类的销售额", "sm"), Chart("bar", @Pivot(rows, "region", "category", "amount"), "key", null, "currency", null, true)], null, 4, 2)
+top = Card([Title("热销商品", "sm"), Table(["商品", "数量", "销售额"], @Each(@Top(@GroupBy(rows, "product", "amount"), "value", 5), "p", [p.key, @Sum(@Filter(rows, "product", "==", p.key).units), @Format(p.value, "currency", 0)]))], null, 4, 2)`;
 
 const support = `root = Col([head, kpis, Grid([weekly, teams], 2, 300, 4), Grid([spread, csat], 2, 300, 4), queue], 4)
 $days = "60"
-$team = "All"
+$team = "全部"
 tickets = Query("get_tickets", {days: $days}, {rows: []})
-rows = $team == "All" ? tickets.rows : @Filter(tickets.rows, "team", "==", $team)
-solved = @Filter(rows, "status", "==", "solved")
-waiting = @Filter(rows, "status", "!=", "solved")
+rows = $team == "全部" ? tickets.rows : @Filter(tickets.rows, "team", "==", $team)
+solved = @Filter(rows, "status", "==", "已解决")
+waiting = @Filter(rows, "status", "!=", "已解决")
 hours = @Stats(solved.hours)
-weeks = @Each(@Bucket(rows, "opened", "week"), "w", {week: @FormatDate(w.key, "short"), Opened: w.value, Solved: @Count(@Between(solved, "opened", w.key, @AddDays(w.key, 6)))})
-head = Row([Col([Title("Support desk", "lg"), Caption("Tickets opened in the selected period")], 1), Spacer(), Box([Select($team, [{value: "All", label: "All teams"}, "Billing", "Technical", "Accounts", "Shipping"])], null, null, null, null, null, null, 150), SegmentedControl($days, [{value: "30", label: "30d"}, {value: "60", label: "60d"}, {value: "180", label: "6m"}])], 3, null, null, true)
+weeks = @Each(@Bucket(rows, "opened", "week"), "w", {week: @FormatDate(w.key, "short"), 新建: w.value, 已解决: @Count(@Between(solved, "opened", w.key, @AddDays(w.key, 6)))})
+head = Row([Col([Title("客服中心", "lg"), Caption("所选时间段内创建的工单")], 1), Spacer(), Box([Select($team, [{value: "全部", label: "全部团队"}, "账单", "技术", "账户", "物流"])], null, null, null, null, null, null, 150), SegmentedControl($days, [{value: "30", label: "30d"}, {value: "60", label: "60d"}, {value: "180", label: "6m"}])], 3, null, null, true)
 kpis = Grid([k1, k2, k3, k4], 4, 150, 3)
-k1 = Card([Caption("Opened"), Title(@Format(@Count(rows)), "xl")], null, 3, 1)
-k2 = Card([Caption("Waiting"), Title(@Format(@Count(waiting)), "xl", @Count(waiting) > 40 ? "danger" : null), Caption(@Count(@Filter(waiting, "priority", "==", "urgent")) + " urgent")], null, 3, 1)
-k3 = Card([Caption("Median time to solve"), Title(@Format(hours.median, "number", 1) + " h", "xl"), Caption("Slowest " + @Format(hours.max, "number", 0) + " h")], null, 3, 1)
-k4 = Card([Caption("Satisfaction"), Title(@Format(@Avg(@Filter(solved, "csat", ">", 0).csat), "number", 2) + " / 5", "xl")], null, 3, 1)
-weekly = Card([Title("Opened and solved by week", "sm"), Chart("bar", weeks, "week", ["Opened", "Solved"])], null, 4, 2)
-teams = Card([Title("Average hours to solve, by team", "sm"), Chart("bar", @Sort(@GroupBy(solved, "team", "hours", "avg"), "value", "desc"), "key", ["value"])], null, 4, 2)
-spread = Card([Title("How long tickets take (hours)", "sm"), Chart("bar", @Histogram(solved.hours, 12), "key", ["value"])], null, 4, 2)
-csat = Card([Title("Satisfaction, 7-day average", "sm"), Chart("line", @MovingAvg(@Bucket(@Filter(solved, "csat", ">", 0), "opened", "day", "csat", "avg"), "value", 7), "key", ["value"])], null, 4, 2)
-queue = Card([Title("Waiting longest", "sm"), Table(["Ticket", "Team", "Priority", "Waiting"], @Each(@Top(@Each(waiting, "t", {id: t.id, team: t.team, priority: t.priority, age: @DaysBetween(t.opened, @Now())}), "age", 6), "t", [t.id, t.team, Badge(t.priority, t.priority == "urgent" ? "danger" : t.priority == "high" ? "warning" : "neutral"), @Plural(t.age, "day")]))], null, 4, 2)`;
+k1 = Card([Caption("已创建"), Title(@Format(@Count(rows)), "xl")], null, 3, 1)
+k2 = Card([Caption("待处理"), Title(@Format(@Count(waiting)), "xl", @Count(waiting) > 40 ? "danger" : null), Caption(@Count(@Filter(waiting, "priority", "==", "紧急")) + " 紧急")], null, 3, 1)
+k3 = Card([Caption("解决时长中位数"), Title(@Format(hours.median, "number", 1) + " h", "xl"), Caption("最慢 " + @Format(hours.max, "number", 0) + " h")], null, 3, 1)
+k4 = Card([Caption("满意度"), Title(@Format(@Avg(@Filter(solved, "csat", ">", 0).csat), "number", 2) + " / 5", "xl")], null, 3, 1)
+weekly = Card([Title("每周创建与解决数", "sm"), Chart("bar", weeks, "week", ["新建", "已解决"])], null, 4, 2)
+teams = Card([Title("各团队平均解决时长", "sm"), Chart("bar", @Sort(@GroupBy(solved, "team", "hours", "avg"), "value", "desc"), "key", ["value"])], null, 4, 2)
+spread = Card([Title("工单处理时长（小时）", "sm"), Chart("bar", @Histogram(solved.hours, 12), "key", ["value"])], null, 4, 2)
+csat = Card([Title("满意度（7 日平均）", "sm"), Chart("line", @MovingAvg(@Bucket(@Filter(solved, "csat", ">", 0), "opened", "day", "csat", "avg"), "value", 7), "key", ["value"])], null, 4, 2)
+queue = Card([Title("等待时间最长", "sm"), Table(["工单", "团队", "优先级", "待处理"], @Each(@Top(@Each(waiting, "t", {id: t.id, team: t.team, priority: t.priority, age: @DaysBetween(t.opened, @Now())}), "age", 6), "t", [t.id, t.team, Badge(t.priority, t.priority == "紧急" ? "danger" : t.priority == "高" ? "warning" : "neutral"), @Plural(t.age, "天")]))], null, 4, 2)`;
 
-const bicycle = `root = Col([head, photos, Title("The main parts", "md"), parts, Title("How power reaches the wheel", "md"), flow, explorer, Title("Freewheel or cassette?", "md"), hubs, closing])
+const bicycle = `root = Col([head, photos, Title("主要部件", "md"), parts, Title("动力如何传到车轮", "md"), flow, explorer, Title("旋式飞轮还是卡式飞轮？", "md"), hubs, closing])
 $gear = 3
 $rpm = 80
-head = Col([Title("Inside a 7-speed bike", "xl"), Text("One chainring at the front, seven sprockets at the back and a derailleur that moves the chain between them. Small sprockets make each pedal stroke go further; big ones make hills easier.", "md", "muted")], 2)
+head = Col([Title("7 速自行车的内部结构", "xl"), Text("前方有一个牙盘，后方有七个飞轮片，后拨会在它们之间移动链条。小飞轮让每次踩踏前进更远，大飞轮让爬坡更轻松。", "md", "muted")], 2)
 photos = Grid([SearchImage("City bicycle", 1.3, "lg"), SearchImage("Derailleur", 1.3, "lg"), SearchImage("Bicycle shifter", 1.3, "lg")], 3, 150, 2)
-parts = Table(["Part", "What it does"], [["Frame and fork", "Hold everything together, steer and set the riding position"], ["Crankset and pedals", "Turn leg power into rotation"], ["Chainring", "The single front gear, here 40 teeth"], ["Chain", "Carries the power to the rear wheel"], ["7 rear sprockets", "Seven sizes, so seven gear ratios"], ["Rear derailleur", "Moves the chain from sprocket to sprocket"], ["Shifter and cable", "Pull or release the cable to pick a gear"], ["Brakes, wheels and tires", "Stop, roll and grip the road"]])
-flow = Card([Row(@Each(chain, "s", Row([Box([Text(s, "sm", null, "medium")], null, null, 2, "surface", "md"), s == "Rear wheel" ? null : Icon("arrow-right", "sm", "faint")], 1)), 1, "center", "center", true), Caption("The shifter pulls a cable; the derailleur guides the chain onto the sprocket you choose.")], "soft", 3, 2)
-chain = ["Pedals", "Chainring", "Chain", "Rear sprocket", "Rear wheel"]
+parts = Table(["部件", "作用"], [["车架和前叉", "连接整车、控制方向并确定骑行姿势"], ["曲柄组和脚踏", "把腿部力量转成旋转"], ["牙盘", "前方唯一齿轮，本例为 40 齿"], ["链条", "将动力传到后轮"], ["7 个后飞轮片", "七种尺寸，对应七种齿比"], ["后拨", "在飞轮片之间移动链条"], ["变速器和线管", "拉紧或放松线管来选择档位"], ["刹车、车轮和轮胎", "负责制动、滚动和抓地"]])
+flow = Card([Row(@Each(chain, "s", Row([Box([Text(s, "sm", null, "medium")], null, null, 2, "surface", "md"), s == "后轮" ? null : Icon("arrow-right", "sm", "faint")], 1)), 1, "center", "center", true), Caption("变速器拉动线管，后拨将链条引导到你选择的飞轮片上。")], "soft", 3, 2)
+chain = ["脚踏", "牙盘", "链条", "后飞轮片", "后轮"]
 teeth = [28, 24, 21, 18, 16, 14, 12]
 tooth = teeth[$gear - 1]
 ratio = 40 / tooth
 speed = $rpm * ratio * 2.1 * 60 / 1000
-mode = $gear <= 2 ? "Easy, for climbing" : $gear <= 5 ? "Moderate, for cruising" : "Hard, for speed"
-explorer = Card([exHead, cogs, Slider($gear, 1, 7, 1, "Gear", null, [{value: 1, label: "1 · Easy"}, {value: 4, label: "4"}, {value: 7, label: "7 · Fast"}]), stats, Slider($rpm, 50, 110, 5, "Pedaling cadence", " rpm"), Text(feel, "sm"), Caption("Assumes a 40-tooth chainring, a 12-28 freewheel and a 700c wheel (2.1 m around). Real bikes vary.")], null, 4, 3)
-exHead = Row([Col([Label("Explore the seven gears"), Title("Gear " + $gear + " of 7", "xl")], 1), Spacer(), Badge(mode, $gear <= 2 ? "success" : $gear <= 5 ? "info" : "warning")], 3, null, null, true)
+mode = $gear <= 2 ? "轻松，适合爬坡" : $gear <= 5 ? "适中，适合巡航" : "费力，适合高速"
+explorer = Card([exHead, cogs, Slider($gear, 1, 7, 1, "档位", null, [{value: 1, label: "1 · 轻松"}, {value: 4, label: "4"}, {value: 7, label: "7 · 快速"}]), stats, Slider($rpm, 50, 110, 5, "踩踏频率", " rpm"), Text(feel, "sm"), Caption("假设牙盘 40 齿、飞轮 12–28 齿、700c 车轮（周长 2.1 米）。实际自行车会有所不同。")], null, 4, 3)
+exHead = Row([Col([Label("探索七个档位"), Title("第 " + $gear + " 档，共 7 档", "xl")], 1), Spacer(), Badge(mode, $gear <= 2 ? "success" : $gear <= 5 ? "info" : "warning")], 3, null, null, true)
 cogs = Svg(@Each(@Range(0, 7), "i", G([Circle(26 + i * 45, 52, 6 + teeth[i] * 0.55, i == $gear - 1 ? "info" : "surface", i == $gear - 1 ? "info" : "faint", 2, i == $gear - 1 ? 0.85 : 1), Circle(26 + i * 45, 52, 4, "muted"), SvgText(teeth[i] + "T", 26 + i * 45, 104, 11, i == $gear - 1 ? "info" : "muted", "middle", i == $gear - 1 ? "semibold" : "normal")])), "0 0 320 112")
 stats = Grid([s1, s2, s3], 3, 90, 2)
-s1 = Card([Caption("Rear sprocket"), Title(tooth + " teeth", "lg")], "soft", 3, 1)
-s2 = Card([Caption("Gear ratio"), Title(@Format(ratio, "number", 2) + " : 1", "lg")], "soft", 3, 1)
-s3 = Card([Caption("Speed at " + $rpm + " rpm"), Title(@Format(speed, "number", 1) + " km/h", "lg")], "soft", 3, 1)
-feel = "Each turn of the pedals turns the rear wheel " + @Format(ratio, "number", 2) + " times. " + ($gear <= 2 ? "Light to push, good for hills and starting from a stop." : $gear <= 5 ? "Balanced effort for flat roads and everyday riding." : "Heavy to push but fast, for descents and tailwinds.")
-hubs = Col([SearchImage("Cassette (bicycle)", 2.4, "lg"), Grid([h1, h2], 2, 220, 3)], 3)
-h1 = Card([Text("Freewheel", "sm", null, "semibold"), Caption("The ratchet sits inside the sprocket cluster, which screws onto the hub. Common on budget and youth bikes.")], "soft", 3, 1)
-h2 = Card([Text("Cassette", "sm", null, "semibold"), Caption("The sprockets slide onto a freehub that holds the ratchet. Better axle support and easy gear swaps.")], "soft", 3, 1)
-closing = Text("Seven speeds keep the drivetrain simple, light and cheap to maintain: one shifter, one derailleur and no front gear changes to think about.", "sm", "muted")`;
+s1 = Card([Caption("后飞轮片"), Title(tooth + " 齿", "lg")], "soft", 3, 1)
+s2 = Card([Caption("齿比"), Title(@Format(ratio, "number", 2) + " : 1", "lg")], "soft", 3, 1)
+s3 = Card([Caption("速度（" + $rpm + " rpm"), Title(@Format(speed, "number", 1) + " km/h", "lg")], "soft", 3, 1)
+feel = "每踩一圈，后轮转动 " + @Format(ratio, "number", 2) + " 圈。" + ($gear <= 2 ? "踩踏轻松，适合爬坡和起步。" : $gear <= 5 ? "力度均衡，适合平路和日常骑行。" : "踩踏较重但速度快，适合下坡和顺风。")
+hubs = Col([SearchImage("自行车卡式飞轮", 2.4, "lg"), Grid([h1, h2], 2, 220, 3)], 3)
+h1 = Card([Text("旋式飞轮", "sm", null, "semibold"), Caption("棘轮位于飞轮组内部，飞轮组旋入花鼓，常见于入门和青少年自行车。")], "soft", 3, 1)
+h2 = Card([Text("卡式飞轮", "sm", null, "semibold"), Caption("飞轮片套在带棘轮的塔基上，轴承支撑更好，也更容易更换档位。")], "soft", 3, 1)
+closing = Text("七速传动系统简单、轻便且易维护：一个变速器、一个后拨，无需考虑前方换档。", "sm", "muted")`;
 
-const bikeRepair = `root = Col([head, meta, setup, tools, Title("Assembly, step by step", "md"), progress, checklist, Title("Visual references", "md"), refs, fit, safety])
+const bikeRepair = `root = Col([head, meta, setup, tools, Title("组装步骤", "md"), progress, checklist, Title("图示参考", "md"), refs, fit, safety])
 $done = []
-$brakes = "Rim"
+$brakes = "轮圈刹车"
 $inseam = 56
-head = Col([Title("Assemble a youth bike", "xl"), Text("Most youth bikes arrive about 85% built. You fit the handlebars, front wheel, pedals and saddle, then set up the brakes. Tap each step as you finish it.", "md", "muted")], 2)
-meta = Row([Badge("45 to 90 minutes", "info"), Badge("Beginner friendly", "success"), Badge("Adult job, kid helper", "purple")], 2, null, null, true)
-setup = Row([Label("Brake type"), SegmentedControl($brakes, ["Rim", "Disc", "Coaster"])], 3, null, null, true)
-tools = Card([Label("You will need"), List(["4, 5 and 6 mm Allen keys", "15 mm pedal wrench", "Phillips screwdriver", "Pump with a pressure gauge", "Scissors for the zip ties"])], "soft", 3, 2)
-stepList = [{title: "Unbox and check", detail: "Cut the zip ties, remove the packaging and lay the parts out: front wheel, pedals marked L and R, saddle and reflectors."}, {title: "Fit the handlebars", detail: "Seat the stem, line the bars up with the front wheel and tighten the bolts evenly, a little at a time."}, {title: "Install the front wheel", detail: "Seat the axle fully in the fork, then close the quick release or tighten both axle nuts. Spin it: it should run straight."}, {title: "Attach the pedals", detail: "The right pedal threads clockwise, the left anticlockwise. Start both by hand, then snug them with the 15 mm wrench."}, {title: "Set the saddle height", detail: "Insert the seat post at least to its minimum insertion mark, set the height below and tighten the clamp."}, {title: brakeTitle, detail: brakeDetail}, {title: "Inflate the tires", detail: "Pump to the pressure printed on the sidewall and check the bead sits evenly all round."}, {title: "Final safety check", detail: "Check every bolt, fit the reflectors and the bell, and test the brakes at walking pace."}]
-brakeTitle = $brakes == "Coaster" ? "Check the coaster brake" : $brakes == "Disc" ? "Center the disc brakes" : "Set up the rim brakes"
-brakeDetail = $brakes == "Rim" ? "Hook the cable noodle into the V-brake arms and center the pads on the rim, not the tire. The wheel should lock before the lever reaches the grip." : $brakes == "Disc" ? "Spin the wheel: the rotor should pass through the caliper without rubbing. If it rubs, loosen the caliper bolts, squeeze the brake and retighten." : "Pedal backwards: the rear wheel should lock. Make sure the brake arm is bolted to the frame strap."
-progress = Col([Row([Text(@Count($done) + " of " + @Count(stepList) + " steps done", "sm", "muted"), Spacer(), @Count($done) == @Count(stepList) ? Badge("Ready to ride", "success") : Button("Reset", @Reset($done), "ghost", null, "sm", "rotate-ccw")], 2), Box([Box([], null, null, null, "chart2", "full", null, @Percent(@Count($done), @Count(stepList)) + "%", 6)], null, null, null, "border", "full", null, "100%", 6)], 2)
+head = Col([Title("组装青少年自行车", "xl"), Text("大多数青少年自行车到货时已完成约 85% 的组装。安装车把、前轮、脚踏和坐垫，再调好刹车。每完成一步就点击勾选。", "md", "muted")], 2)
+meta = Row([Badge("45 至 90 分钟", "info"), Badge("适合初学者", "success"), Badge("成人操作，孩子协助", "purple")], 2, null, null, true)
+setup = Row([Label("刹车类型"), SegmentedControl($brakes, ["轮圈刹车", "碟刹", "脚刹"])], 3, null, null, true)
+tools = Card([Label("所需工具"), List(["4、5、6 毫米内六角扳手", "15 毫米脚踏扳手", "十字螺丝刀", "带压力表的打气筒", "剪扎带用的剪刀"])], "soft", 3, 2)
+stepList = [{title: "拆箱检查", detail: "剪开扎带并拆除包装，摆好前轮、标有 L 和 R 的脚踏、坐垫和反光片。"}, {title: "安装车把", detail: "装好把立，让车把与前轮对齐，再逐步均匀拧紧螺栓。"}, {title: "安装前轮", detail: "将车轴完全装入前叉，扣好快拆或拧紧两侧轴螺母。转动前轮，确认运转平直。"}, {title: "安装脚踏", detail: "右脚踏顺时针拧入，左脚踏逆时针拧入。先用手旋入，再用 15 毫米扳手拧紧。"}, {title: "设置坐垫高度", detail: "座管至少插到最低插入线，调整到下方计算的高度并拧紧夹具。"}, {title: brakeTitle, detail: brakeDetail}, {title: "给轮胎充气", detail: "充到胎侧标注的压力，并检查胎唇四周是否均匀就位。"}, {title: "最终安全检查", detail: "检查所有螺栓，装好反光片和车铃，并以步行速度测试刹车。"}]
+brakeTitle = $brakes == "脚刹" ? "检查脚刹" : $brakes == "碟刹" ? "居中调整碟刹" : "设置轮圈刹车"
+brakeDetail = $brakes == "轮圈刹车" ? "将线管弯头挂入 V 刹夹臂，让刹车皮对准轮圈而不是轮胎。刹车手柄碰到车把前，车轮应能锁止。" : $brakes == "碟刹" ? "转动车轮：碟片应能无摩擦地通过卡钳。如有摩擦，先松开卡钳螺栓，捏住刹车后再拧紧。" : "向后踩脚踏：后轮应锁止。确认刹车臂已固定在车架连接片上。"
+progress = Col([Row([Text(@Count($done) + " / " + @Count(stepList) + " 步已完成", "sm", "muted"), Spacer(), @Count($done) == @Count(stepList) ? Badge("可以骑行", "success") : Button("重置", @Reset($done), "ghost", null, "sm", "rotate-ccw")], 2), Box([Box([], null, null, null, "chart2", "full", null, @Percent(@Count($done), @Count(stepList)) + "%", 6)], null, null, null, "border", "full", null, "100%", 6)], 2)
 checklist = Col(@Each(@Range(0, @Count(stepList)), "i", Pressable([Row([Icon(@Includes($done, i) ? "check-circle" : "circle", "md", @Includes($done, i) ? "success" : "faint"), Col([Text((i + 1) + ". " + stepList[i].title, "sm", null, "semibold", false, @Includes($done, i)), Caption(stepList[i].detail)], 1)], 3, "start")], @Set($done, @Toggle($done, i)), @Includes($done, i), 3)), 1)
 refs = Grid([r1, r2, r3, r4], 2, 160, 3)
-r1 = Col([SearchImage("Bicycle wheel quick release", 1.4, "lg"), Caption("Front wheel seated in the fork")], 1)
-r2 = Col([SearchImage("Bicycle pedal", 1.4, "lg"), Caption("Pedals: right clockwise, left anticlockwise")], 1)
-r3 = Col([SearchImage("V-brake", 1.4, "lg"), Caption("Brake pads meet the rim squarely")], 1)
-r4 = Col([SearchImage("Seatpost", 1.4, "lg"), Caption("Never above the minimum insertion mark")], 1)
-fit = Card([Title("Saddle height", "sm"), Input($inseam, "Your child's inseam, in cm", "number"), Text($inseam > 0 ? "Start with the top of the saddle about **" + @Round($inseam - 2) + " cm** from the ground so both feet touch flat. Once your child rides confidently, raise it to about **" + @Round($inseam + 3) + " cm**, where only the balls of the feet touch." : "Measure from the floor to the crotch, in socks, with the back against a wall.", "sm")], "soft", 4, 2)
-safety = Box([Row([Icon("shield-check", "md", "success"), Text("Before the first ride: the brakes stop the bike, both wheels are tight, the bars do not twist against the front wheel and the helmet fits snugly.", "sm")], 2, "start")], null, null, 3, "success", "lg")`;
+r1 = Col([SearchImage("自行车轮快拆", 1.4, "lg"), Caption("前轮已装入前叉")], 1)
+r2 = Col([SearchImage("Bicycle pedal", 1.4, "lg"), Caption("脚踏：右侧顺时针，左侧逆时针")], 1)
+r3 = Col([SearchImage("V-brake", 1.4, "lg"), Caption("刹车皮与轮圈平行贴合")], 1)
+r4 = Col([SearchImage("Seatpost", 1.4, "lg"), Caption("不得超过最低插入线")], 1)
+fit = Card([Title("坐垫高度", "sm"), Input($inseam, "孩子的内侧腿长（厘米）", "number"), Text($inseam > 0 ? "先将坐垫顶部设在约 **" + @Round($inseam - 2) + " cm**，让双脚能平放在地面。熟练骑行后，再提高到约 **" + @Round($inseam + 3) + " cm**，此时只有前脚掌接触地面。" : "穿袜子背靠墙站立，从地面量到裆部。", "sm")], "soft", 4, 2)
+safety = Box([Row([Icon("shield-check", "md", "success"), Text("首次骑行前：确认刹车能让自行车停下、两个车轮固定牢靠、车把不会相对前轮扭转，并且头盔贴合。", "sm")], 2, "start")], null, null, 3, "success", "lg")`;
 
-const route = `root = Col([head, photos, badges, map, selected, Row([Title("Stop by stop", "md"), Spacer(), SegmentedControl($pace, ["Relaxed", "Balanced", "Packed"])], 3, null, null, true), itinerary, closing])
+const route = `root = Col([head, photos, badges, map, selected, Row([Title("逐站游览", "md"), Spacer(), SegmentedControl($pace, ["悠闲", "适中", "紧凑"])], 3, null, null, true), itinerary, closing])
 $stop = "Ferry Building"
-$pace = "Balanced"
-head = Col([Title("San Francisco in one day", "xl"), Text("A scenic loop from the waterfront to the Golden Gate, with time to eat, walk and take photos. Tap a pin or a stop for details.", "md", "muted")], 2)
-photos = Grid([SearchImage("Golden Gate Bridge", 1.4, "lg"), SearchImage("Painted Ladies Alamo Square", 1.4, "lg"), SearchImage("San Francisco cable car", 1.4, "lg")], 3, 140, 2)
-badges = Row([Badge(@Plural(@Count(places), "stop"), "info"), Badge("About " + @Format(@Last(ends).mins / 60, "number", 1) + " hours", "neutral"), Badge("Walk, cable car and bus", "purple")], 2, null, null, true)
+$pace = "适中"
+head = Col([Title("旧金山一日游", "xl"), Text("从海滨到金门大桥的风景环线，留出用餐、步行和拍照时间。点击地图标记或站点查看详情。", "md", "muted")], 2)
+photos = Grid([SearchImage("金门大桥", 1.4, "lg"), SearchImage("阿拉莫广场彩绘女士", 1.4, "lg"), SearchImage("旧金山缆车", 1.4, "lg")], 3, 140, 2)
+badges = Row([Badge(@Plural(@Count(places), "个站点"), "info"), Badge("约 " + @Format(@Last(ends).mins / 60, "number", 1) + " 小时", "neutral"), Badge("步行、缆车和公交", "purple")], 2, null, null, true)
 map = Map(@Each(places, "p", MapMarker(p.name, p.lat, p.lng, p.category)), true, $stop, 340)
-factor = $pace == "Relaxed" ? 1.3 : $pace == "Packed" ? 0.75 : 1
+factor = $pace == "悠闲" ? 1.3 : $pace == "紧凑" ? 0.75 : 1
 plan = @Each(places, "p", {name: p.name, mins: @Round(p.minutes * factor / 5) * 5 + 20})
 ends = @Cumulative(plan, "mins")
 starts = @Each(@Range(0, @Count(places)), "i", 540 + ends[i].mins - plan[i].mins)
 rows = @Each(@Range(0, @Count(places)), "i", {name: places[i].name, desc: places[i].desc, category: places[i].category, stay: @Round(places[i].minutes * factor / 5) * 5, time: (@Floor(starts[i] / 60) > 12 ? @Floor(starts[i] / 60) - 12 : @Floor(starts[i] / 60)) + ":" + @Pad(starts[i] % 60, 2) + (starts[i] >= 720 ? " PM" : " AM")})
 sel = @Find(rows, "name", $stop)
-selected = sel == null ? null : Card([Row([Icon("map-pin", "md", "info"), Col([Text(sel.name, "md", null, "semibold"), Caption(sel.time + " · " + sel.stay + " min · " + sel.category)], 0), Spacer(), Button("Directions", @OpenUrl("https://www.google.com/maps/search/?api=1&query=" + sel.name + " San Francisco"), "outline", null, "sm", "navigation")], 3, null, null, true), Text(sel.desc, "sm")], "soft", 3, 2)
-itinerary = Col(@Each(rows, "r", Pressable([Row([Box([SearchImage(r.name + " San Francisco", 1, "md")], null, null, null, null, "md", null, 64, 64), Col([Row([Text(r.time, "sm", "info", "semibold", false, false, true), Caption(r.stay + " min")], 2), Text(r.name, "sm", null, "semibold"), Caption(r.desc)], 0)], 3)], @Set($stop, r.name), r.name == $stop, 2)), 1)
-closing = Col([Text("Times are estimates and include about 20 minutes to get to each next stop. Cable cars run every 10 minutes or so; a Muni day pass covers them and the buses.", "xs", "muted"), Row([Button("Plan a second day", @ToAssistant("Plan a second day in San Francisco that avoids these stops"), "outline", null, "sm", "calendar-plus")])], 2)
-places = [{name: "Ferry Building", lat: 37.7955, lng: -122.3937, category: "Food", minutes: 45, desc: "Coffee and pastries in the 1898 market hall on the bay."}, {name: "Coit Tower", lat: 37.8024, lng: -122.4058, category: "Views", minutes: 45, desc: "Climb Telegraph Hill for Depression-era murals and a 360° view."}, {name: "Lombard Street", lat: 37.8021, lng: -122.4187, category: "Landmarks", minutes: 30, desc: "Walk down the crooked block of brick switchbacks and hydrangeas."}, {name: "Fisherman's Wharf", lat: 37.808, lng: -122.4177, category: "Food", minutes: 60, desc: "Sea lions at Pier 39 and clam chowder in a sourdough bowl."}, {name: "Palace of Fine Arts", lat: 37.8029, lng: -122.4484, category: "Landmarks", minutes: 40, desc: "A Roman-style rotunda reflected in a quiet lagoon."}, {name: "Golden Gate Bridge", lat: 37.8077, lng: -122.4752, category: "Views", minutes: 75, desc: "Walk out to the first tower for the classic view back at the city."}, {name: "Golden Gate Park", lat: 37.7694, lng: -122.4862, category: "Parks", minutes: 60, desc: "The Japanese Tea Garden and the Conservatory of Flowers."}, {name: "Alamo Square", lat: 37.7764, lng: -122.4346, category: "Views", minutes: 30, desc: "End with the Painted Ladies and the skyline at sunset."}]`;
+selected = sel == null ? null : Card([Row([Icon("map-pin", "md", "info"), Col([Text(sel.name, "md", null, "semibold"), Caption(sel.time + " · " + sel.stay + " 分钟 · " + sel.category)], 0), Spacer(), Button("路线", @OpenUrl("https://www.google.com/maps/search/?api=1&query=" + sel.name + " 旧金山"), "outline", null, "sm", "navigation")], 3, null, null, true), Text(sel.desc, "sm")], "soft", 3, 2)
+itinerary = Col(@Each(rows, "r", Pressable([Row([Box([SearchImage(r.name + " 旧金山", 1, "md")], null, null, null, null, "md", null, 64, 64), Col([Row([Text(r.time, "sm", "info", "semibold", false, false, true), Caption(r.stay + " 分钟")], 2), Text(r.name, "sm", null, "semibold"), Caption(r.desc)], 0)], 3)], @Set($stop, r.name), r.name == $stop, 2)), 1)
+closing = Col([Text("时间为估算值，并包含前往下一站约 20 分钟。缆车约每 10 分钟一班，Muni 一日通票可乘坐缆车和公交。", "xs", "muted"), Row([Button("规划第二天", @ToAssistant("规划避开这些站点的旧金山第二天行程"), "outline", null, "sm", "calendar-plus")])], 2)
+places = [{name: "Ferry Building", lat: 37.7955, lng: -122.3937, category: "餐饮", minutes: 45, desc: "在海湾边的 1898 年市场大厅享用咖啡和糕点。"}, {name: "Coit Tower", lat: 37.8024, lng: -122.4058, category: "景观", minutes: 45, desc: "登上电报山，欣赏大萧条时期壁画和 360° 全景。"}, {name: "Lombard Street", lat: 37.8021, lng: -122.4187, category: "地标", minutes: 30, desc: "沿着曲折的砖路漫步，欣赏绣球花。"}, {name: "渔人码头", lat: 37.808, lng: -122.4177, category: "餐饮", minutes: 60, desc: "在 39 号码头看海狮，在酸面包碗里品尝蛤蜊浓汤。"}, {name: "艺术宫", lat: 37.8029, lng: -122.4484, category: "地标", minutes: 40, desc: "罗马风格的圆形大厅倒映在宁静的泻湖中。"}, {name: "金门大桥", lat: 37.8077, lng: -122.4752, category: "景观", minutes: 75, desc: "走到第一座塔，回望城市经典景色。"}, {name: "金门公园", lat: 37.7694, lng: -122.4862, category: "公园", minutes: 60, desc: "日本茶园和花卉温室。"}, {name: "Alamo Square", lat: 37.7764, lng: -122.4346, category: "景观", minutes: 30, desc: "以彩绘女士和日落时分的城市天际线收尾。"}]`;
 
-const roadtrip = `root = Col([head, photos, badges, map, Title("Day by day", "md"), days, budget, before, ask])
+const roadtrip = `root = Col([head, photos, badges, map, Title("逐日行程", "md"), days, budget, before, ask])
 $stop = "Seattle"
-$tier = "Mid-range"
+$tier = "舒适型"
 $travelers = 2
-head = Col([Title("Ten days in the Pacific Northwest", "xl"), Text("Rain forest, wild beaches, the Columbia River Gorge and a volcano, in one loop from Seattle. Tap a day to find it on the map.", "md", "muted")], 2)
-photos = Grid([SearchImage("Mount Rainier Paradise", 1.4, "lg"), SearchImage("Hoh Rain Forest", 1.4, "lg"), SearchImage("Cannon Beach Haystack Rock", 1.4, "lg")], 3, 140, 2)
-badges = Row([Badge("Best July to September", "info"), Badge("About 1,150 miles", "neutral"), Badge("9 nights", "purple")], 2, null, null, true)
+head = Col([Title("太平洋西北地区十日自驾", "xl"), Text("从西雅图出发，环游雨林、野海滩、哥伦比亚河峡谷和火山。点击日期可在地图上查看站点。", "md", "muted")], 2)
+photos = Grid([SearchImage("天堂区雷尼尔山", 1.4, "lg"), SearchImage("Hoh Rain Forest", 1.4, "lg"), SearchImage("坎农海滩干草堆岩", 1.4, "lg")], 3, 140, 2)
+badges = Row([Badge("最佳出行时间：7 月至 9 月", "info"), Badge("约 1,150 英里", "neutral"), Badge("9 晚", "purple")], 2, null, null, true)
 map = Map(@Each(stops, "s", MapMarker(s.name, s.lat, s.lng, s.kind)), true, $stop, 360)
-stops = [{name: "Seattle", lat: 47.6062, lng: -122.3321, kind: "City"}, {name: "Port Angeles", lat: 48.1181, lng: -123.4307, kind: "Town"}, {name: "Hoh Rain Forest", lat: 47.8601, lng: -123.9348, kind: "Nature"}, {name: "Ruby Beach", lat: 47.7107, lng: -124.4152, kind: "Nature"}, {name: "Astoria", lat: 46.1879, lng: -123.8313, kind: "Town"}, {name: "Cannon Beach", lat: 45.8918, lng: -123.9615, kind: "Nature"}, {name: "Portland", lat: 45.5152, lng: -122.6784, kind: "City"}, {name: "Multnomah Falls", lat: 45.5762, lng: -122.1158, kind: "Nature"}, {name: "Mount Rainier", lat: 46.786, lng: -121.7353, kind: "Nature"}]
-plan = [{day: 1, title: "Seattle", place: "Seattle", drive: "Arrive", night: "Seattle", text: "Pike Place Market, the waterfront and the Space Needle at dusk."}, {day: 2, title: "Ferry to the Olympic Peninsula", place: "Port Angeles", drive: "2.5 h with the ferry", night: "Port Angeles", text: "Take the Edmonds ferry, then drive up to Hurricane Ridge for mountain views."}, {day: 3, title: "Hoh Rain Forest", place: "Hoh Rain Forest", drive: "2 h", night: "Forks", text: "Walk the Hall of Mosses under moss-draped maples; stop at Lake Crescent on the way."}, {day: 4, title: "The wild coast", place: "Ruby Beach", drive: "1 h", night: "Kalaloch", text: "Sea stacks, driftwood and tide pools at Ruby Beach and Rialto Beach."}, {day: 5, title: "South to Astoria", place: "Astoria", drive: "3.5 h", night: "Astoria", text: "Cross the Columbia at its mouth and climb the Astoria Column."}, {day: 6, title: "Cannon Beach", place: "Cannon Beach", drive: "40 min", night: "Cannon Beach", text: "Haystack Rock at low tide, then the trail at Ecola State Park."}, {day: 7, title: "Portland", place: "Portland", drive: "1.5 h", night: "Portland", text: "Food carts, Powell's Books and the Japanese Garden."}, {day: 8, title: "Columbia River Gorge", place: "Multnomah Falls", drive: "1 h each way", night: "Portland", text: "Multnomah Falls and the waterfall corridor; check whether a timed permit is needed."}, {day: 9, title: "Mount Rainier", place: "Mount Rainier", drive: "3.5 h", night: "Ashford", text: "Wildflower meadows and glacier views on the Skyline Trail at Paradise."}, {day: 10, title: "Back to Seattle", place: "Seattle", drive: "2.5 h", night: "", text: "A last morning hike, then return the car in Seattle."}]
-days = Col(@Each(plan, "d", Pressable([Row([Box([Title(d.day + "", "md")], null, null, 2, d.place == $stop ? "info" : "surface", "md", null, 44, 44, null, "center", "center"), Col([Text(d.title, "sm", null, "semibold"), Caption(d.night == "" ? d.drive : d.drive + " · overnight in " + d.night), Text(d.text, "sm", "muted")], 0)], 3, "start")], @Set($stop, d.place), d.place == $stop, 2)), 1)
-tiers = [{name: "Budget", lodging: 115, car: 45, food: 40}, {name: "Mid-range", lodging: 190, car: 60, food: 65}, {name: "Comfort", lodging: 320, car: 90, food: 110}]
+stops = [{name: "Seattle", lat: 47.6062, lng: -122.3321, kind: "城市"}, {name: "Port Angeles", lat: 48.1181, lng: -123.4307, kind: "小镇"}, {name: "Hoh Rain Forest", lat: 47.8601, lng: -123.9348, kind: "自然景观"}, {name: "Ruby Beach", lat: 47.7107, lng: -124.4152, kind: "自然景观"}, {name: "Astoria", lat: 46.1879, lng: -123.8313, kind: "小镇"}, {name: "Cannon Beach", lat: 45.8918, lng: -123.9615, kind: "自然景观"}, {name: "Portland", lat: 45.5152, lng: -122.6784, kind: "城市"}, {name: "Multnomah Falls", lat: 45.5762, lng: -122.1158, kind: "自然景观"}, {name: "Mount Rainier", lat: 46.786, lng: -121.7353, kind: "自然景观"}]
+plan = [{day: 1, title: "Seattle", place: "Seattle", drive: "抵达", night: "Seattle", text: "逛派克市场和海滨，黄昏时前往太空针塔。"}, {day: 2, title: "乘渡轮前往奥林匹克半岛", place: "Port Angeles", drive: "含渡轮约 2.5 小时", night: "Port Angeles", text: "乘坐埃德蒙兹渡轮，再开车前往飓风岭欣赏山景。"}, {day: 3, title: "Hoh Rain Forest", place: "Hoh Rain Forest", drive: "2 h", night: "Forks", text: "漫步苔藓厅，看枫树披满苔藓；途中停靠新月湖。"}, {day: 4, title: "荒野海岸", place: "Ruby Beach", drive: "1 h", night: "Kalaloch", text: "在红宝石海滩和里亚尔托海滩欣赏海蚀柱、漂流木和潮池。"}, {day: 5, title: "向南前往阿斯托里亚", place: "Astoria", drive: "3.5 h", night: "Astoria", text: "在哥伦比亚河入海口过河，再登上阿斯托里亚纪念柱。"}, {day: 6, title: "Cannon Beach", place: "Cannon Beach", drive: "40 min", night: "Cannon Beach", text: "退潮时看干草堆岩，再走一段埃科拉州立公园步道。"}, {day: 7, title: "Portland", place: "Portland", drive: "1.5 h", night: "Portland", text: "逛餐车、鲍威尔书店和日本花园。"}, {day: 8, title: "哥伦比亚河峡谷", place: "Multnomah Falls", drive: "1 h each way", night: "Portland", text: "游览马特诺玛瀑布和瀑布走廊；出发前确认是否需要预约时段。"}, {day: 9, title: "Mount Rainier", place: "Mount Rainier", drive: "3.5 h", night: "Ashford", text: "在天堂区的天际线步道欣赏野花草甸和冰川景色。"}, {day: 10, title: "Back to Seattle", place: "Seattle", drive: "2.5 h", night: "", text: "最后一个早晨安排徒步，然后回西雅图还车。"}]
+days = Col(@Each(plan, "d", Pressable([Row([Box([Title(d.day + "", "md")], null, null, 2, d.place == $stop ? "info" : "surface", "md", null, 44, 44, null, "center", "center"), Col([Text(d.title, "sm", null, "semibold"), Caption(d.night == "" ? d.drive : d.drive + " · 夜宿 " + d.night), Text(d.text, "sm", "muted")], 0)], 3, "start")], @Set($stop, d.place), d.place == $stop, 2)), 1)
+tiers = [{name: "经济型", lodging: 115, car: 45, food: 40}, {name: "舒适型", lodging: 190, car: 60, food: 65}, {name: "豪华型", lodging: 320, car: 90, food: 110}]
 t = @Find(tiers, "name", $tier)
 rooms = @Ceil($travelers / 2)
-costs = [{item: "Lodging", amount: t.lodging * 9 * rooms}, {item: "Rental car", amount: t.car * 10}, {item: "Gas", amount: @Round(1150 / 27 * 4.6)}, {item: "Food", amount: t.food * 10 * $travelers}, {item: "Park pass", amount: 80}, {item: "Ferries and extras", amount: 250}]
+costs = [{item: "住宿", amount: t.lodging * 9 * rooms}, {item: "租车", amount: t.car * 10}, {item: "汽油", amount: @Round(1150 / 27 * 4.6)}, {item: "餐饮", amount: t.food * 10 * $travelers}, {item: "公园通票", amount: 80}, {item: "渡轮及其他", amount: 250}]
 total = @Sum(costs.amount)
-budget = Card([Row([Title("Estimated budget", "md"), Spacer(), SegmentedControl($tier, ["Budget", "Mid-range", "Comfort"])], 3, null, null, true), Row([Text("Travelers", "sm"), Spacer(), IconButton("minus", @Set($travelers, @Clamp($travelers - 1, 1, 6)), "Fewer travelers"), Text($travelers + "", "md", null, "semibold", false, false, true), IconButton("plus", @Set($travelers, @Clamp($travelers + 1, 1, 6)), "More travelers")], 2), Grid([k1, k2], 2, 150, 3), Chart("bar", costs, "item", ["amount"], "currency", null, false, 200), Caption("Summer prices for 9 nights, " + @Plural(rooms, "room") + ", one rental car. Treat it as a starting point.")], null, 4, 3)
-k1 = Card([Caption("Trip total"), Title(@Format(total, "currency", 0), "xl")], "soft", 3, 1)
-k2 = Card([Caption("Per person"), Title(@Format(total / $travelers, "currency", 0), "xl")], "soft", 3, 1)
-before = Card([Title("Before you go", "sm"), List(["Book lodges near Olympic and Rainier months ahead for summer.", "Multnomah Falls may need a timed-use permit in peak season.", "Check wildfire closures and air quality the week you leave.", "An America the Beautiful pass covers both national parks."])], "soft", 4, 2)
-ask = Row([Button("Swap a day for the San Juan Islands", @ToAssistant("Swap one day of this Pacific Northwest road trip for the San Juan Islands"), "outline", null, "sm", "ship")])`;
+budget = Card([Row([Title("预算估算", "md"), Spacer(), SegmentedControl($tier, ["经济型", "舒适型", "豪华型"])], 3, null, null, true), Row([Text("出行人数", "sm"), Spacer(), IconButton("minus", @Set($travelers, @Clamp($travelers - 1, 1, 6)), "减少出行人数"), Text($travelers + "", "md", null, "semibold", false, false, true), IconButton("plus", @Set($travelers, @Clamp($travelers + 1, 1, 6)), "增加出行人数")], 2), Grid([k1, k2], 2, 150, 3), Chart("bar", costs, "item", ["amount"], "currency", null, false, 200), Caption("9 晚夏季价格，" + @Plural(rooms, "间房") + "，含一辆租车。此预算仅供参考。")], null, 4, 3)
+k1 = Card([Caption("行程总计"), Title(@Format(total, "currency", 0), "xl")], "soft", 3, 1)
+k2 = Card([Caption("人均费用"), Title(@Format(total / $travelers, "currency", 0), "xl")], "soft", 3, 1)
+before = Card([Title("出发前", "sm"), List(["夏季出行，建议提前数月预订奥林匹克和雷尼尔山附近的旅馆。", "旅游旺季游览马特诺玛瀑布可能需要预约入场时段。", "出发前一周查看野火封闭信息和空气质量。", "购买 America the Beautiful 通票可覆盖这两座国家公园。"])], "soft", 4, 2)
+ask = Row([Button("用一天行程换成圣胡安群岛", @ToAssistant("将这趟太平洋西北自驾中的一天改为游览圣胡安群岛"), "outline", null, "sm", "ship")])`;
 
-const room = `root = Col([head, preview, Title("Tell me about your room", "md"), quiz, Title("Your best matches", "md"), matches, Title("All six colors", "md"), swatches, tip])
-$mood = "calm"
-$light = "north"
-$sofa = "grey"
-$pick = "Warm ivory"
-head = Col([Title("Find your living room color", "xl"), Text("Answer three questions and the matches update. Tap any color to paint the room.", "md", "muted")], 2)
-colors = [{name: "Warm ivory", hex: "#EFE6D3", note: "Soft and bright, never stark", moods: ["calm", "bright"], lights: ["north", "low"], sofas: ["grey", "blue", "green", "brown"]}, {name: "Sage green", hex: "#B5BFA1", note: "Grounded and restful", moods: ["calm", "cozy"], lights: ["south", "east"], sofas: ["grey", "brown", "white"]}, {name: "Greige", hex: "#CFC5B8", note: "A warm neutral that goes with everything", moods: ["calm", "bright"], lights: ["north", "south", "east", "low"], sofas: ["grey", "blue", "green", "brown", "white"]}, {name: "Dusty blue", hex: "#9DB0BF", note: "Airy and cool", moods: ["calm", "bright"], lights: ["south", "east"], sofas: ["white", "brown", "grey"]}, {name: "Terracotta", hex: "#C9785A", note: "Warm and full of character", moods: ["cozy", "bold"], lights: ["north", "low", "east"], sofas: ["white", "green", "blue"]}, {name: "Deep navy", hex: "#2F3E55", note: "Dramatic and enveloping", moods: ["bold", "cozy"], lights: ["south", "east"], sofas: ["white", "brown", "green"]}]
+const room = `root = Col([head, preview, Title("介绍一下你的房间", "md"), quiz, Title("最适合你的颜色", "md"), matches, Title("全部六种颜色", "md"), swatches, tip])
+$mood = "平静"
+$light = "北向"
+$sofa = "灰色"
+$pick = "暖象牙白"
+head = Col([Title("为客厅挑选颜色", "xl"), Text("回答三个问题后，推荐结果会自动更新。点击任意颜色，预览房间效果。", "md", "muted")], 2)
+colors = [{name: "暖象牙白", hex: "#EFE6D3", note: "柔和明亮，不显生硬", moods: ["平静", "明亮"], lights: ["北向", "弱光"], sofas: ["灰色", "蓝色", "绿色", "棕色"]}, {name: "鼠尾草绿", hex: "#B5BFA1", note: "沉稳宁静", moods: ["平静", "温馨"], lights: ["南向", "东西向"], sofas: ["灰色", "棕色", "白色"]}, {name: "灰米色", hex: "#CFC5B8", note: "百搭的暖调中性色", moods: ["平静", "明亮"], lights: ["北向", "南向", "东西向", "弱光"], sofas: ["灰色", "蓝色", "绿色", "棕色", "白色"]}, {name: "灰蓝色", hex: "#9DB0BF", note: "清爽冷调", moods: ["平静", "明亮"], lights: ["南向", "东西向"], sofas: ["白色", "棕色", "灰色"]}, {name: "陶土色", hex: "#C9785A", note: "温暖而有个性", moods: ["温馨", "大胆"], lights: ["北向", "弱光", "东西向"], sofas: ["白色", "绿色", "蓝色"]}, {name: "深海军蓝", hex: "#2F3E55", note: "浓郁且富有包裹感", moods: ["大胆", "温馨"], lights: ["南向", "东西向"], sofas: ["白色", "棕色", "绿色"]}]
 scored = @Each(colors, "c", {name: c.name, hex: c.hex, note: c.note, score: (@Includes(c.moods, $mood) ? 2 : 0) + (@Includes(c.lights, $light) ? 2 : 0) + (@Includes(c.sofas, $sofa) ? 1 : 0)})
 best = @Take(@Sort(scored, "score", "desc"), 3)
 picked = @Find(colors, "name", $pick)
-sofaHex = $sofa == "grey" ? "#8D9197" : $sofa == "blue" ? "#3F5A7A" : $sofa == "green" ? "#4F6B52" : $sofa == "brown" ? "#7A5236" : "#EFEEEA"
-tint = $light == "north" ? "#9EC5FF" : $light == "south" ? "#FFC870" : $light == "east" ? "#FFE6B0" : "#000000"
-tintOpacity = $light == "north" ? 0.14 : $light == "south" ? 0.16 : $light == "east" ? 0.08 : 0.22
-lightNote = $light == "north" ? "North light is cool and flat: warm colors stay warm" : $light == "south" ? "South light is warm: cool colors keep it fresh" : $light == "east" ? "The color shifts from morning to evening" : "Low light deepens every color"
+sofaHex = $sofa == "灰色" ? "#8D9197" : $sofa == "蓝色" ? "#3F5A7A" : $sofa == "绿色" ? "#4F6B52" : $sofa == "棕色" ? "#7A5236" : "#EFEEEA"
+tint = $light == "北向" ? "#9EC5FF" : $light == "南向" ? "#FFC870" : $light == "东西向" ? "#FFE6B0" : "#000000"
+tintOpacity = $light == "北向" ? 0.14 : $light == "南向" ? 0.16 : $light == "东西向" ? 0.08 : 0.22
+lightNote = $light == "北向" ? "北向光线偏冷：暖色依然显得温暖" : $light == "南向" ? "南向阳光较暖：冷色能保持清新" : $light == "东西向" ? "颜色会随早晚光线变化" : "弱光会加深所有颜色"
 room = Svg([Rect(0, 0, 320, 132, picked.hex), Rect(0, 132, 320, 48, "#B08D6A"), Rect(0, 128, 320, 6, "#E9E4DA"), Rect(28, 24, 70, 76, "#DCE9F5", "#FFFFFF", 5), Line(63, 24, 63, 100, "#FFFFFF", 4), Line(28, 62, 98, 62, "#FFFFFF", 4), Rect(196, 30, 70, 44, "#F4F1EA", "#8A7A66", 3), Circle(214, 52, 9, "#C9785A", null, null, 0.7), Circle(238, 48, 12, "#9DB0BF", null, null, 0.7), Rect(150, 98, 150, 40, sofaHex, null, null, 1, 10), Rect(160, 84, 62, 26, sofaHex, null, null, 1, 8), Rect(228, 84, 62, 26, sofaHex, null, null, 1, 8), Rect(144, 104, 16, 34, sofaHex, null, null, 1, 6), Rect(290, 104, 16, 34, sofaHex, null, null, 1, 6), Rect(0, 0, 320, 180, tint, null, null, tintOpacity)], "0 0 320 180")
 preview = Card([room, Row([Box([], null, null, null, picked.hex, "full", true, 18, 18), Text(picked.name, "sm", null, "semibold"), Spacer(), Caption(lightNote)], 2, null, null, true)], null, 3, 2)
-quiz = Grid([RadioGroup($mood, [{value: "calm", label: "Calm and restful"}, {value: "cozy", label: "Warm and cozy"}, {value: "bright", label: "Light and airy"}, {value: "bold", label: "A bold statement"}], "How should it feel?"), RadioGroup($light, [{value: "north", label: "North facing, cool light"}, {value: "south", label: "South facing, warm sun"}, {value: "east", label: "East or west, changing"}, {value: "low", label: "Little daylight"}], "What light does it get?"), RadioGroup($sofa, [{value: "grey", label: "Grey"}, {value: "blue", label: "Blue"}, {value: "green", label: "Green"}, {value: "brown", label: "Brown leather"}, {value: "white", label: "White or cream"}], "Your sofa")], 3, 200, 4)
-matches = Grid(@Each(best, "c", Pressable([Box([], null, null, null, c.hex, "md", true, "100%", 64), Text(c.name, "sm", null, "semibold"), Caption(c.note), Badge(c.score >= 4 ? "Great match" : c.score >= 2 ? "Good match" : "Worth a look", c.score >= 4 ? "success" : c.score >= 2 ? "info" : "neutral")], @Set($pick, c.name), c.name == $pick, 2)), 3, 150, 3)
+quiz = Grid([RadioGroup($mood, [{value: "平静", label: "平静放松"}, {value: "温馨", label: "温馨舒适"}, {value: "明亮", label: "明亮通透"}, {value: "大胆", label: "大胆醒目"}], "你希望房间给人什么感觉？"), RadioGroup($light, [{value: "北向", label: "朝北，光线偏冷"}, {value: "南向", label: "朝南，阳光充足"}, {value: "东西向", label: "朝东或朝西，光线会变化"}, {value: "弱光", label: "日照较少"}], "房间的采光如何？"), RadioGroup($sofa, [{value: "灰色", label: "灰色"}, {value: "蓝色", label: "蓝色"}, {value: "绿色", label: "绿色"}, {value: "棕色", label: "棕色皮革"}, {value: "白色", label: "白色或奶油色"}], "你的沙发颜色")], 3, 200, 4)
+matches = Grid(@Each(best, "c", Pressable([Box([], null, null, null, c.hex, "md", true, "100%", 64), Text(c.name, "sm", null, "semibold"), Caption(c.note), Badge(c.score >= 4 ? "很匹配" : c.score >= 2 ? "比较匹配" : "可以考虑", c.score >= 4 ? "success" : c.score >= 2 ? "info" : "neutral")], @Set($pick, c.name), c.name == $pick, 2)), 3, 150, 3)
 swatches = Row(@Each(colors, "c", Pressable([Col([Box([], null, null, null, c.hex, "full", true, 40, 40), Caption(c.name)], 1, "center")], @Set($pick, c.name), c.name == $pick, 2)), 2, null, null, true)
-tip = Text("Paint chips look different on the wall. Try a large sample on two walls and look at it in the morning and the evening before you commit.", "sm", "muted")`;
+tip = Text("色卡颜色上墙后可能不同。正式涂刷前，先在两面墙上试涂较大面积，并分别在早晚观察效果。", "sm", "muted")`;
 
-const origami = `root = Col([head, viewer, Title("All six steps", "md"), strip, tip])
+const origami = `root = Col([head, viewer, Title("全部六步", "md"), strip, tip])
 $step = 0
-head = Col([Title("Fold an origami fox", "xl"), Text("A simple fox face from one square of paper: no cutting, about five minutes. Orange on one side and white on the other works best.", "md", "muted"), Row([Badge("Beginner", "success"), Badge("5 minutes", "info"), Badge("One square sheet", "neutral")], 2, null, null, true)], 2)
-steps = [{title: "Start with a diamond", text: "Place the square white side up, with a corner pointing at you."}, {title: "Fold it in half", text: "Fold the top corner down to the bottom corner to make a triangle. Crease well."}, {title: "Corners to the point", text: "Fold the left and right corners down to the bottom point, making a small diamond."}, {title: "Make the ears", text: "Fold each flap's bottom tip back up and out past the top edge. These are the ears."}, {title: "Fold the forehead", text: "Fold the top point down a little to give the fox a flat forehead."}, {title: "Turn over and add a face", text: "Turn the paper over. Draw two eyes and a nose near the bottom point."}]
+head = Col([Title("折一只狐狸折纸", "xl"), Text("用一张正方形纸折出简单的狐狸脸：无需剪裁，约 5 分钟完成。橙色一面配白色背面效果最好。", "md", "muted"), Row([Badge("适合初学者", "success"), Badge("约 5 分钟", "info"), Badge("一张正方形纸", "neutral")], 2, null, null, true)], 2)
+steps = [{title: "先将纸摆成菱形", text: "白色面朝上，将正方形纸的一角对着自己。"}, {title: "对折纸张", text: "将上角向下对齐底角，折成三角形并压实折痕。"}, {title: "将两侧角折向底角", text: "将左右两角向下折到最底端，形成一个小菱形。"}, {title: "折出耳朵", text: "将两侧翻片的底角向上、向外折过顶边，形成耳朵。"}, {title: "折出额头", text: "将顶部尖角稍微向下折，形成平坦的额头。"}, {title: "翻面并画出脸", text: "将纸翻面，在底部尖角附近画上眼睛和鼻子。"}]
 o = "#F28C38"
 w = "#FBE6D2"
 e = "#B85E1C"
@@ -283,74 +283,74 @@ d3 = Svg([Polygon("60,140 100,100 140,140 100,180", o, e, 2), Polygon("62,138 98
 d4 = Svg([Polygon("60,140 80,118 120,118 140,140 100,180", o, e, 2), Polygon("62,138 98,124 70,58", w, e, 2), Polygon("138,138 102,124 130,58", w, e, 2), Polygon("80,118 120,118 100,136", w, e, 1.5)], "0 0 200 200")
 d5 = Svg([Polygon("60,140 80,118 120,118 140,140 100,180", o, e, 2), Polygon("62,138 98,124 70,58", o, e, 2), Polygon("138,138 102,124 130,58", o, e, 2), Polygon("70,124 88,122 74,82", w), Polygon("130,124 112,122 126,82", w), Circle(86, 142, 4.5, "#2B2B2B"), Circle(114, 142, 4.5, "#2B2B2B"), Circle(100, 168, 5, "#2B2B2B")], "0 0 200 200")
 drawings = [d0, d1, d2, d3, d4, d5]
-viewer = Card([Row([Badge("Step " + ($step + 1) + " of 6", "info"), Spacer(), Caption(@Percent($step + 1, 6) + "% folded")], 2), Box([drawings[$step]], null, null, 3, "surface", "lg", null, "100%", null, null, "center", "center"), Title(steps[$step].title, "md"), Text(steps[$step].text, "sm"), Box([Box([], null, null, null, "chart1", "full", null, @Percent($step + 1, 6) + "%", 4)], null, null, null, "border", "full", null, "100%", 4), Row([Button("Back", @Set($step, @Clamp($step - 1, 0, 5)), "outline", null, null, "arrow-left", $step == 0), Spacer(), $step < 5 ? Button("Next fold", @Set($step, $step + 1), "solid", null, null, "arrow-right") : Button("Start again", @Set($step, 0), "solid", null, null, "rotate-ccw")], 2)], null, 4, 3)
+viewer = Card([Row([Badge("第 " + ($step + 1) + " 步，共 6 步", "info"), Spacer(), Caption(@Percent($step + 1, 6) + "% 已折")], 2), Box([drawings[$step]], null, null, 3, "surface", "lg", null, "100%", null, null, "center", "center"), Title(steps[$step].title, "md"), Text(steps[$step].text, "sm"), Box([Box([], null, null, null, "chart1", "full", null, @Percent($step + 1, 6) + "%", 4)], null, null, null, "border", "full", null, "100%", 4), Row([Button("上一步", @Set($step, @Clamp($step - 1, 0, 5)), "outline", null, null, "arrow-left", $step == 0), Spacer(), $step < 5 ? Button("下一步", @Set($step, $step + 1), "solid", null, null, "arrow-right") : Button("重新开始", @Set($step, 0), "solid", null, null, "rotate-ccw")], 2)], null, 4, 3)
 strip = Grid(@Each(@Range(0, 6), "i", Pressable([drawings[i], Caption((i + 1) + ". " + steps[i].title)], @Set($step, i), i == $step, 2)), 6, 96, 2)
-tip = Row([Icon("lightbulb", "sm", "warning"), Text("Sharp creases make the difference: run a fingernail along each fold before the next one.", "sm", "muted")], 2)`;
+tip = Row([Icon("lightbulb", "sm", "warning"), Text("折痕压得清晰，作品才会更好看：每次继续折之前，用指甲压实折痕。", "sm", "muted")], 2)`;
 
-const garden = `root = Col([head, size, Title("Pick what to grow", "md"), picker, sunNote, Title("Your bed, square by square", "md"), bed, Caption("Each square is one foot across; the number is how many plants fit in it."), Title("Planting summary", "md"), summary, Title("What you will need", "md"), needs])
+const garden = `root = Col([head, size, Title("选择种植作物", "md"), picker, sunNote, Title("逐格规划种植床", "md"), bed, Caption("每格宽 1 英尺，数字表示该格可种植的株数。"), Title("种植摘要", "md"), summary, Title("所需物品", "md"), needs])
 $w = 4
 $l = 6
 $sun = 7
-$chosen = ["Tomatoes", "Lettuce", "Beans", "Radishes", "Basil", "Carrots"]
+$chosen = ["番茄", "生菜", "豆类", "萝卜", "罗勒", "胡萝卜"]
 $got = []
-head = Col([Title("Plan a small vegetable garden", "xl"), Text("Set the bed size and how much sun it gets, choose your crops, and the square-foot plan fills itself in.", "md", "muted")], 2)
-crops = [{name: "Tomatoes", icon: "🍅", per: 1, weeks: 10, sun: 8, color: "#F6D5CF"}, {name: "Peppers", icon: "🌶️", per: 1, weeks: 11, sun: 8, color: "#F7DCC4"}, {name: "Beans", icon: "🌱", per: 9, weeks: 8, sun: 6, color: "#DCEBD0"}, {name: "Lettuce", icon: "🥬", per: 4, weeks: 6, sun: 4, color: "#E2F0D3"}, {name: "Spinach", icon: "🍃", per: 9, weeks: 6, sun: 4, color: "#D5EAD6"}, {name: "Carrots", icon: "🥕", per: 16, weeks: 10, sun: 6, color: "#FBE2C9"}, {name: "Radishes", icon: "🔴", per: 16, weeks: 4, sun: 4, color: "#F8D9E2"}, {name: "Basil", icon: "🌿", per: 4, weeks: 8, sun: 6, color: "#D8ECCF"}]
+head = Col([Title("规划一座小菜园", "xl"), Text("设置种植床尺寸和日照时长，选好作物后，方格种植方案会自动生成。", "md", "muted")], 2)
+crops = [{name: "番茄", icon: "🍅", per: 1, weeks: 10, sun: 8, color: "#F6D5CF"}, {name: "甜椒", icon: "🌶️", per: 1, weeks: 11, sun: 8, color: "#F7DCC4"}, {name: "豆类", icon: "🌱", per: 9, weeks: 8, sun: 6, color: "#DCEBD0"}, {name: "生菜", icon: "🥬", per: 4, weeks: 6, sun: 4, color: "#E2F0D3"}, {name: "菠菜", icon: "🍃", per: 9, weeks: 6, sun: 4, color: "#D5EAD6"}, {name: "胡萝卜", icon: "🥕", per: 16, weeks: 10, sun: 6, color: "#FBE2C9"}, {name: "萝卜", icon: "🔴", per: 16, weeks: 4, sun: 4, color: "#F8D9E2"}, {name: "罗勒", icon: "🌿", per: 4, weeks: 8, sun: 6, color: "#D8ECCF"}]
 picked = @Each($chosen, "n", @Find(crops, "name", n))
 cells = @Count(picked) == 0 ? [] : @Each(@Range(0, $w * $l), "i", picked[i % @Count(picked)])
-size = Card([Grid([Slider($w, 2, 8, 1, "Bed width", " ft"), Slider($l, 2, 12, 1, "Bed length", " ft"), Slider($sun, 2, 12, 1, "Direct sun", " h")], 3, 200, 5), Row([Badge(@Plural($w * $l, "square foot", "square feet"), "info"), Badge("About " + @Plural(@Ceil($w * $l * 0.83 / 1.5), "bag") + " of soil for 10 inches deep", "neutral")], 2, null, null, true)], "soft", 4, 3)
+size = Card([Grid([Slider($w, 2, 8, 1, "种植床宽度", " 英尺"), Slider($l, 2, 12, 1, "种植床长度", " 英尺"), Slider($sun, 2, 12, 1, "直射日照", " 小时")], 3, 200, 5), Row([Badge(@Plural($w * $l, "平方英尺"), "info"), Badge("约 " + @Plural(@Ceil($w * $l * 0.83 / 1.5), "袋土") + "（土层深 10 英寸）", "neutral")], 2, null, null, true)], "soft", 4, 3)
 picker = Row(@Each(crops, "c", Pressable([Row([Text(c.icon, "md"), Text(c.name, "sm", null, "medium")], 1)], @Set($chosen, @Toggle($chosen, c.name)), @Includes($chosen, c.name), 2, null, "full")), 2, null, null, true)
 shady = @Filter(picked, "sun", ">", $sun)
-sunNote = @Count(shady) > 0 ? Box([Text("With " + @Plural($sun, "hour") + " of sun, " + @Join(shady, ", ", "name") + " will struggle. Leafy greens and radishes cope with 4 hours.", "sm", "warning")], null, null, 3, "warning", "lg") : Box([Text(@Count(picked) == 0 ? "Choose at least one crop to see the plan." : "Everything you picked gets enough sun.", "sm", @Count(picked) == 0 ? "muted" : "success")], null, null, 3, @Count(picked) == 0 ? "surface" : "success", "lg")
+sunNote = @Count(shady) > 0 ? Box([Text("日照 " + $sun + " 小时时，" + @Join(shady, "、", "name") + " 可能生长困难；叶菜和萝卜在 4 小时日照下也能生长。", "sm", "warning")], null, null, 3, "warning", "lg") : Box([Text(@Count(picked) == 0 ? "至少选择一种作物以查看种植方案。" : "你选择的作物都能获得足够日照。", "sm", @Count(picked) == 0 ? "muted" : "success")], null, null, 3, @Count(picked) == 0 ? "surface" : "success", "lg")
 bed = Box([Grid(@Each(cells, "c", Box([Text(c.icon, "lg"), Caption(c.per + "")], null, 0, 1, c.color, "sm", null, null, 56, null, "center", "center")), $w, null, 1)], null, null, 2, "#8B6A4E", "lg")
-summary = Table(["Crop", "Squares", "Plants", "First harvest", "Sun"], @Each(picked, "p", [p.icon + " " + p.name, @Count(@Filter(cells, "name", "==", p.name)), @Count(@Filter(cells, "name", "==", p.name)) * p.per, p.weeks + " weeks", p.sun + "+ h"]))
-items = ["A raised bed or a dug-over plot", "Compost-rich soil", "Seeds or seedlings", "Mulch", "A watering can or drip hose", "Stakes or a trellis"]
-needs = Card([Row([Text(@Count($got) + " of " + @Count(items) + " ready", "sm", "muted"), Spacer(), Button("Reset", @Reset($got), "ghost", null, "sm", "rotate-ccw")], 2), Col(@Each(items, "it", Pressable([Row([Icon(@Includes($got, it) ? "check-circle" : "circle", "sm", @Includes($got, it) ? "success" : "faint"), Text(it, "sm", null, null, false, @Includes($got, it))], 2)], @Set($got, @Toggle($got, it)), @Includes($got, it), 2)), 1)], null, 4, 2)`;
+summary = Table(["作物", "格数", "株数", "首次收获", "日照"], @Each(picked, "p", [p.icon + " " + p.name, @Count(@Filter(cells, "name", "==", p.name)), @Count(@Filter(cells, "name", "==", p.name)) * p.per, p.weeks + " 周", p.sun + "+ 小时"]))
+items = ["高架种植床或翻整好的土地", "富含堆肥的土壤", "种子或幼苗", "覆盖物", "洒水壶或滴灌软管", "支柱或攀爬架"]
+needs = Card([Row([Text(@Count($got) + " / " + @Count(items) + " 项准备就绪", "sm", "muted"), Spacer(), Button("重置", @Reset($got), "ghost", null, "sm", "rotate-ccw")], 2), Col(@Each(items, "it", Pressable([Row([Icon(@Includes($got, it) ? "check-circle" : "circle", "sm", @Includes($got, it) ? "success" : "faint"), Text(it, "sm", null, null, false, @Includes($got, it))], 2)], @Set($got, @Toggle($got, it)), @Includes($got, it), 2)), 1)], null, 4, 2)`;
 
-const wardrobe = `root = Col([head, photos, setup, Title("The palette", "md"), palette, Title("Packing list", "md"), packing, Title("Outfits, day by day", "md"), outfits, tip])
+const wardrobe = `root = Col([head, photos, setup, Title("配色方案", "md"), palette, Title("行李清单", "md"), packing, Title("逐日穿搭", "md"), outfits, tip])
 $days = 7
-$weather = "Mild"
+$weather = "温和"
 $packed = []
-head = Col([Title("A capsule wardrobe for a week away", "xl"), Text("A dozen pieces in one palette that all work together. Change the trip and the list and the outfits follow.", "md", "muted")], 2)
-photos = Grid([SearchImage("Folded clothes", 1.2, "lg"), SearchImage("Capsule wardrobe", 1.2, "lg"), SearchImage("Suitcase", 1.2, "lg")], 3, 140, 2)
-setup = Card([Grid([Slider($days, 3, 14, 1, "Trip length", " days"), Col([Label("Weather"), SegmentedControl($weather, ["Warm", "Mild", "Cool"])], 2)], 2, 220, 5)], "soft", 4)
-colors = [{name: "Navy", hex: "#2F3E55"}, {name: "White", hex: "#F7F5F0"}, {name: "Stone", hex: "#CFC5B8"}, {name: "Olive", hex: "#6B7350"}, {name: "Tan", hex: "#B98B5E"}]
+head = Col([Title("一周旅行胶囊衣橱", "xl"), Text("用一组配色协调的约 12 件衣物搭配出多套穿搭。调整行程，清单和每日搭配也会随之变化。", "md", "muted")], 2)
+photos = Grid([SearchImage("Folded clothes", 1.2, "lg"), SearchImage("胶囊衣橱", 1.2, "lg"), SearchImage("Suitcase", 1.2, "lg")], 3, 140, 2)
+setup = Card([Grid([Slider($days, 3, 14, 1, "旅行天数", " 天"), Col([Label("天气"), SegmentedControl($weather, ["温暖", "温和", "凉爽"])], 2)], 2, 220, 5)], "soft", 4)
+colors = [{name: "海军蓝", hex: "#2F3E55"}, {name: "白色", hex: "#F7F5F0"}, {name: "浅褐色", hex: "#CFC5B8"}, {name: "橄榄绿", hex: "#6B7350"}, {name: "棕褐色", hex: "#B98B5E"}]
 palette = Row(@Each(colors, "c", Col([Box([], null, null, null, c.hex, "full", true, 40, 40), Caption(c.name)], 1, "center")), 4, null, null, true)
-tops = $weather == "Warm" ? ["White linen shirt", "Navy tee", "Striped tee", "Olive camp shirt"] : $weather == "Cool" ? ["Merino crewneck", "White Oxford shirt", "Navy long-sleeve tee", "Stone knit"] : ["White tee", "Navy Oxford shirt", "Striped long-sleeve tee", "Stone knit polo"]
-bottoms = $weather == "Warm" ? ["Stone linen trousers", "Navy shorts"] : $weather == "Cool" ? ["Dark jeans", "Olive chinos"] : ["Dark jeans", "Stone chinos"]
-layers = $weather == "Warm" ? ["Light overshirt"] : $weather == "Cool" ? ["Wool coat", "Navy cardigan"] : ["Unstructured navy jacket"]
-shoes = $weather == "Cool" ? ["Leather boots", "White sneakers"] : ["White sneakers", "Tan loafers"]
+tops = $weather == "温暖" ? ["白色亚麻衬衫", "海军蓝 T 恤", "条纹 T 恤", "橄榄绿休闲衬衫"] : $weather == "凉爽" ? ["美利奴羊毛圆领衫", "白色牛津纺衬衫", "海军蓝长袖 T 恤", "浅褐色针织衫"] : ["白色 T 恤", "海军蓝牛津纺衬衫", "条纹长袖 T 恤", "浅褐色针织马球衫"]
+bottoms = $weather == "温暖" ? ["浅褐色亚麻长裤", "海军蓝短裤"] : $weather == "凉爽" ? ["深色牛仔裤", "橄榄绿斜纹棉裤"] : ["深色牛仔裤", "浅褐色斜纹棉裤"]
+layers = $weather == "温暖" ? ["轻薄衬衫外套"] : $weather == "凉爽" ? ["羊毛大衣", "海军蓝开衫"] : ["海军蓝休闲西装外套"]
+shoes = $weather == "凉爽" ? ["皮靴", "白色运动鞋"] : ["白色运动鞋", "棕褐色乐福鞋"]
 nTops = @Clamp(@Ceil($days / 2) + 1, 3, @Count(tops))
-list = @Concat(@Concat(@Each(@Take(tops, nTops), "x", {group: "Top", name: x}), @Each(bottoms, "x", {group: "Bottom", name: x})), @Concat(@Concat(@Each(layers, "x", {group: "Layer", name: x}), @Each(shoes, "x", {group: "Shoes", name: x})), [{group: "Basics", name: "Socks and underwear × " + @Min([$days, 7])}, {group: "Basics", name: "Sleepwear"}, {group: "Basics", name: $weather == "Warm" ? "Swimsuit and sunglasses" : "Compact umbrella"}]))
+list = @Concat(@Concat(@Each(@Take(tops, nTops), "x", {group: "上装", name: x}), @Each(bottoms, "x", {group: "下装", name: x})), @Concat(@Concat(@Each(layers, "x", {group: "外搭", name: x}), @Each(shoes, "x", {group: "鞋履", name: x})), [{group: "基础衣物", name: "袜子和内衣 × " + @Min([$days, 7])}, {group: "基础衣物", name: "睡衣"}, {group: "基础衣物", name: $weather == "温暖" ? "泳衣和太阳镜" : "轻便折叠伞"}]))
 done = @Count(@Filter(@Each(list, "it", @Includes($packed, it.name)), "", "==", true))
-packing = Card([Row([Text(done + " of " + @Count(list) + " packed", "sm", "muted", null, false, false, true), Spacer(), Button("Reset", @Reset($packed), "ghost", null, "sm", "rotate-ccw")], 2), Box([Box([], null, null, null, "ink", "full", null, @Percent(done, @Count(list)) + "%", 4)], null, null, null, "border", "full", null, "100%", 4), Col(@Each(list, "it", Pressable([Row([Icon(@Includes($packed, it.name) ? "check-circle" : "circle", "sm", @Includes($packed, it.name) ? "success" : "faint"), Text(it.name, "sm", null, null, false, @Includes($packed, it.name)), Spacer(), Caption(it.group)], 2)], @Set($packed, @Toggle($packed, it.name)), @Includes($packed, it.name), 2)), 1), $days > 7 ? Caption("Plan one laundry stop around day " + @Ceil($days / 2) + ".") : null], null, 4, 2)
-outfits = Card([Col(@Each(@Range(0, $days), "d", Row([Box([Text("Day " + (d + 1), "xs", null, "semibold")], null, null, 1, "surface", "md", null, 56, null, null, "center", "center"), Text(tops[d % nTops] + " with " + bottoms[d % @Count(bottoms)] + ($weather == "Warm" ? "" : ", " + layers[d % @Count(layers)]), "sm"), Spacer(), Caption(shoes[d % @Count(shoes)])], 2)), 2)], null, 3)
-tip = Text("Wear the bulkiest shoes and layer on the travel day, and roll rather than fold to fit everything in a carry-on.", "sm", "muted")`;
+packing = Card([Row([Text("已收拾 " + done + " / " + @Count(list) + " 件", "sm", "muted", null, false, false, true), Spacer(), Button("重置", @Reset($packed), "ghost", null, "sm", "rotate-ccw")], 2), Box([Box([], null, null, null, "ink", "full", null, @Percent(done, @Count(list)) + "%", 4)], null, null, null, "border", "full", null, "100%", 4), Col(@Each(list, "it", Pressable([Row([Icon(@Includes($packed, it.name) ? "check-circle" : "circle", "sm", @Includes($packed, it.name) ? "success" : "faint"), Text(it.name, "sm", null, null, false, @Includes($packed, it.name)), Spacer(), Caption(it.group)], 2)], @Set($packed, @Toggle($packed, it.name)), @Includes($packed, it.name), 2)), 1), $days > 7 ? Caption("建议在第 " + @Ceil($days / 2) + " 天安排一次洗衣。") : null], null, 4, 2)
+outfits = Card([Col(@Each(@Range(0, $days), "d", Row([Box([Text("第 " + (d + 1) + " 天", "xs", null, "semibold")], null, null, 1, "surface", "md", null, 56, null, null, "center", "center"), Text(tops[d % nTops] + " 搭配 " + bottoms[d % @Count(bottoms)] + ($weather == "温暖" ? "" : "、" + layers[d % @Count(layers)]), "sm"), Spacer(), Caption(shoes[d % @Count(shoes)])], 2)), 2)], null, 3)
+tip = Text("出行当天穿最厚重的鞋子和外套；衣物卷起来收纳，比折叠更省空间。", "sm", "muted")`;
 
-const drones = `root = Col([head, Title("How the market is structured", "md"), segments, Title("How big is it?", "md"), sizeCard, Title("Who makes money", "md"), players, Title("Try the economics of a drone photo business", "md"), sim, Title("What is changing", "md"), changes, ask])
+const drones = `root = Col([head, Title("市场结构", "md"), segments, Title("市场规模", "md"), sizeCard, Title("哪些参与者能盈利", "md"), players, Title("模拟无人机摄影业务的经营情况", "md"), sim, Title("行业变化", "md"), changes, ask])
 $projects = 12
 $price = 450
 $cost = 90
 $fixed = 1800
-head = Col([Title("The drone photography market", "xl"), Text("Aerial photos and video for property, events, inspection and media: a young market where cheap hardware meets licensed, skilled work.", "md", "muted")], 2)
-segs = [{name: "Real estate and architecture", query: "Suburb aerial view", text: "Listing photos and video, the steadiest source of work."}, {name: "Weddings and events", query: "Wedding photography", text: "Seasonal and priced per event, often sold with a ground crew."}, {name: "Inspection and surveying", query: "Solar farm aerial", text: "Roofs, solar farms and building sites; more training, better pay."}, {name: "Media and tourism", query: "Aerial photography coastline", text: "Stock footage, tourism boards and film: visible but competitive."}]
+head = Col([Title("无人机摄影市场", "xl"), Text("为房产、活动、巡检和媒体提供航拍照片与视频。这是一个新兴市场，价格亲民的设备与持证专业服务并存。", "md", "muted")], 2)
+segs = [{name: "房地产与建筑", query: "郊区航拍", text: "房源照片和视频，是最稳定的业务来源。"}, {name: "婚礼与活动", query: "婚礼摄影", text: "业务有季节性，按场次收费，通常会与地面摄影团队服务打包。"}, {name: "巡检与测绘", query: "太阳能电站航拍", text: "屋顶、太阳能电站和建筑工地巡检：需要更多培训，报酬也更高。"}, {name: "媒体与旅游", query: "海岸线航拍", text: "素材库、旅游局和影视拍摄：曝光度高，但竞争激烈。"}]
 segments = Grid(@Each(segs, "s", Card([SearchImage(s.query, 1.7, "md"), Text(s.name, "sm", null, "semibold"), Caption(s.text)], null, 3, 2)), 2, 220, 3)
 market = [{year: "2024", size: 860000000}, {year: "2026", size: 1110000000}, {year: "2028", size: 1520000000}, {year: "2030", size: 2260000000}]
-sizeCard = Card([Row([Col([Caption("Drone photography services, worldwide, 2026"), Title(@Format(1110000000, "compact", 1, "USD"), "2xl")], 1), Spacer(), Badge("About 19% a year", "success")], 3, null, null, true), Chart("bar", market, "year", ["size"], "currency", null, false, 200), Caption("Illustrative figures in the range of public market reports; estimates vary widely with the market definition.")], null, 4, 2)
-players = Table(["Who", "How they earn", "Margin"], [["Drone makers", "Hardware, cameras and accessories", Badge("Medium", "warning")], ["Freelance pilots", "Per shoot or per project", Badge("High", "success")], ["Agencies", "Bundles of photo, video and editing", Badge("Medium", "warning")], ["Software platforms", "Mapping and processing subscriptions", Badge("High", "success")]])
+sizeCard = Card([Row([Col([Caption("2026 年全球无人机摄影服务"), Title(@Format(1110000000, "compact", 1, "USD"), "2xl")], 1), Spacer(), Badge("年增长约 19%", "success")], 3, null, null, true), Chart("bar", market, "year", ["size"], "currency", null, false, 200), Caption("示意数据参考公开市场报告；因市场定义不同，各项估算可能差异较大。")], null, 4, 2)
+players = Table(["参与者", "收入来源", "利润率"], [["无人机制造商", "设备、相机和配件", Badge("中", "warning")], ["自由飞手", "按拍摄场次或项目收费", Badge("高", "success")], ["服务机构", "打包提供照片、视频和后期制作", Badge("中", "warning")], ["软件平台", "测绘和数据处理订阅服务", Badge("高", "success")]])
 revenue = $projects * $price
 costs = $fixed + $projects * $cost
 profit = revenue - costs
 margin = revenue > 0 ? profit / revenue * 100 : 0
 breakeven = $price > $cost ? @Ceil($fixed / ($price - $cost)) : null
 curve = @Each(@Range(0, 41, 5), "n", {projects: n + "", Revenue: n * $price, Costs: $fixed + n * $cost})
-sim = Card([Grid([Slider($projects, 0, 40, 1, "Projects per month"), Slider($price, 100, 1500, 25, "Price per project", "$"), Slider($cost, 0, 400, 10, "Cost per project", "$"), Slider($fixed, 0, 6000, 100, "Fixed costs per month", "$")], 2, 240, 5), Grid([k1, k2, k3, k4], 4, 130, 3), Chart("line", curve, "projects", ["Revenue", "Costs"], "currency", null, false, 200), Text(breakevenText, "sm"), Caption("Illustrative. Fixed costs cover insurance, gear, software and marketing; project costs cover editing and travel.")], null, 4, 4)
-k1 = Card([Caption("Revenue a month"), Title(@Format(revenue, "currency", 0), "lg")], "soft", 3, 1)
-k2 = Card([Caption("Profit a month"), Title(@Format(profit, "currency", 0), "lg", profit >= 0 ? "success" : "danger")], "soft", 3, 1)
-k3 = Card([Caption("Margin"), Title(@Format(margin, "percent", 1), "lg")], "soft", 3, 1)
-k4 = Card([Caption("Break-even"), Title(breakeven == null ? "Never" : @Plural(breakeven, "project"), "lg")], "soft", 3, 1)
-breakevenText = breakeven == null ? "Each project costs more than it earns, so more work only loses more money." : breakeven > 40 ? "You would need " + @Plural(breakeven, "project") + " a month just to cover fixed costs: raise the price or cut costs." : "Fixed costs are covered from project " + breakeven + " each month; every project after that adds " + @Format($price - $cost, "currency", 0) + " of profit."
-changes = List(["Cheaper drones with better cameras push basic photo prices down.", "Licensing, such as FAA Part 107 in the US, keeps casual competition out of paid work.", "Inspection, mapping and thermal imaging grow faster than photography alone.", "Clients increasingly want edited video and 3D models, not just photos."])
-ask = Row([Button("Compare with drone inspection services", @ToAssistant("Compare the drone photography market with drone inspection services"), "outline", null, "sm", "arrow-right")])`;
+sim = Card([Grid([Slider($projects, 0, 40, 1, "每月项目数"), Slider($price, 100, 1500, 25, "单个项目报价", "$"), Slider($cost, 0, 400, 10, "单个项目成本", "$"), Slider($fixed, 0, 6000, 100, "每月固定成本", "$")], 2, 240, 5), Grid([k1, k2, k3, k4], 4, 130, 3), Chart("line", curve, "projects", ["Revenue", "Costs"], "currency", null, false, 200), Text(breakevenText, "sm"), Caption("仅作示意。固定成本包括保险、设备、软件和营销；项目成本包括后期制作和差旅。")], null, 4, 4)
+k1 = Card([Caption("月收入"), Title(@Format(revenue, "currency", 0), "lg")], "soft", 3, 1)
+k2 = Card([Caption("月利润"), Title(@Format(profit, "currency", 0), "lg", profit >= 0 ? "success" : "danger")], "soft", 3, 1)
+k3 = Card([Caption("利润率"), Title(@Format(margin, "percent", 1), "lg")], "soft", 3, 1)
+k4 = Card([Caption("盈亏平衡"), Title(breakeven == null ? "无法实现" : @Plural(breakeven, "个项目"), "lg")], "soft", 3, 1)
+breakevenText = breakeven == null ? "每个项目的成本都高于收入，因此增加业务量只会扩大亏损。" : breakeven > 40 ? "每月需要完成 " + @Plural(breakeven, "个项目") + " 才能覆盖固定成本；建议提高报价或降低成本。" : "从第 " + breakeven + " 个项目起即可覆盖固定成本；此后每个项目增加 " + @Format($price - $cost, "currency", 0) + " 利润。"
+changes = List(["更便宜、相机更好的无人机让基础航拍服务价格下降。", "在美国，FAA Part 107 等许可要求使缺乏资质的竞争者难以进入商业市场。", "巡检、测绘和热成像业务的增长快于单纯摄影。", "客户越来越需要剪辑视频和 3D 模型，而不只是照片。"])
+ask = Row([Button("与无人机巡检服务比较", @ToAssistant("比较无人机摄影和无人机巡检市场"), "outline", null, "sm", "arrow-right")])`;
 
 // A small space shooter for HtmlView: keyboard and on-screen buttons, waves that speed up.
 const arcadeHtml = `<style>
@@ -363,11 +363,11 @@ canvas{width:100%;max-width:400px;aspect-ratio:4/5;border-radius:10px;background
 #start{background:#ff2bd6;border-color:#ff2bd6;color:#0b0b1a}
 p{margin:0;font-size:12px;opacity:.7}
 </style>
-<div class="top"><span id="score">SCORE 0</span><span id="wave">WAVE 1</span><span id="lives">♥♥♥</span></div>
+<div class="top"><span id="score">得分 0</span><span id="wave">波次 1</span><span id="lives">♥♥♥</span></div>
 <canvas id="c" width="400" height="500" tabindex="0"></canvas>
-<div class="pad"><button id="left" aria-label="Move left">◀</button><button id="fire">FIRE</button><button id="right" aria-label="Move right">▶</button></div>
-<div class="pad"><button id="start">START GAME</button></div>
-<p>Arrow keys move, space fires. On a phone, use the buttons.</p>
+<div class="pad"><button id="left" aria-label="向左移动">◀</button><button id="fire">开火</button><button id="right" aria-label="向右移动">▶</button></div>
+<div class="pad"><button id="start">开始游戏</button></div>
+<p>使用方向键移动、空格键开火。手机上请使用屏幕按钮。</p>
 <script>
 const c=document.getElementById('c'),g=c.getContext('2d'),W=400,H=500,S=id=>document.getElementById(id),keys={};
 let ship,shots,bombs,aliens,dir,speed,score=0,lives=3,wave=1,running=false,over=false,last=0,cool=0;
@@ -375,7 +375,7 @@ const stars=Array.from({length:60},()=>[Math.random()*W,Math.random()*H,Math.ran
 const colors=['#ff2bd6','#ffb000','#2bf0ff','#7dff5a'];
 function newWave(){aliens=[];for(let r=0;r<4;r++)for(let k=0;k<8;k++)aliens.push({x:40+k*42,y:50+r*34,r});dir=1;speed=20+wave*8}
 function reset(){ship={x:W/2};shots=[];bombs=[];score=0;lives=3;wave=1;over=false;newWave();hud()}
-function hud(){S('score').textContent='SCORE '+score;S('wave').textContent='WAVE '+wave;S('lives').textContent='♥'.repeat(Math.max(lives,0))||'-'}
+function hud(){S('score').textContent='得分 '+score;S('wave').textContent='波次 '+wave;S('lives').textContent='♥'.repeat(Math.max(lives,0))||'-'}
 function fire(){if(running&&cool<=0&&shots.length<3){shots.push({x:ship.x,y:H-48});cool=.28}}
 function step(dt){
 const mv=(keys.ArrowLeft||keys.left?-1:0)+(keys.ArrowRight||keys.right?1:0);
@@ -391,7 +391,7 @@ for(const b of bombs)if(Math.abs(b.x-ship.x)<16&&b.y>H-46&&b.y<H-20){b.hit=true;
 bombs=bombs.filter(b=>!b.hit&&b.y<H);
 if(aliens.some(a=>a.y>H-70))lives=0;
 if(!aliens.length){wave++;newWave()}
-if(lives<=0){running=false;over=true;S('start').textContent='PLAY AGAIN'}
+if(lives<=0){running=false;over=true;S('start').textContent='再玩一次'}
 hud()}
 function draw(){
 g.fillStyle='#05050f';g.fillRect(0,0,W,H);g.fillStyle='#fff';
@@ -400,160 +400,160 @@ aliens.forEach(a=>{g.fillStyle=colors[a.r];g.shadowColor=colors[a.r];g.shadowBlu
 g.shadowBlur=10;g.shadowColor='#2bf0ff';g.fillStyle='#2bf0ff';g.beginPath();g.moveTo(ship.x,H-46);g.lineTo(ship.x+16,H-24);g.lineTo(ship.x-16,H-24);g.closePath();g.fill();
 g.fillStyle='#fff';shots.forEach(s=>g.fillRect(s.x-1.5,s.y-8,3,10));
 g.fillStyle='#ff4d4d';g.shadowColor='#ff4d4d';bombs.forEach(b=>g.fillRect(b.x-2,b.y-6,4,9));g.shadowBlur=0;
-if(!running){g.fillStyle='rgba(5,5,15,.75)';g.fillRect(0,H/2-50,W,100);g.textAlign='center';g.fillStyle='#ff2bd6';g.font='bold 28px ui-monospace,Menlo,monospace';g.fillText(over?'GAME OVER':'NEON INVADERS',W/2,H/2-5);g.fillStyle='#e6e6ff';g.font='13px ui-monospace,Menlo,monospace';g.fillText(over?'Score '+score+'. Press play again':'Press start to play',W/2,H/2+22)}}
+if(!running){g.fillStyle='rgba(5,5,15,.75)';g.fillRect(0,H/2-50,W,100);g.textAlign='center';g.fillStyle='#ff2bd6';g.font='bold 28px ui-monospace,Menlo,monospace';g.fillText(over?'游戏结束':'霓虹入侵者',W/2,H/2-5);g.fillStyle='#e6e6ff';g.font='13px ui-monospace,Menlo,monospace';g.fillText(over?'得分：'+score+'。按下“再玩一次”':'按下“开始游戏”',W/2,H/2+22)}}
 function loop(t){const dt=Math.min(.05,(t-last)/1000||0);last=t;if(running)step(dt);draw();requestAnimationFrame(loop)}
 addEventListener('keydown',e=>{if(['ArrowLeft','ArrowRight',' '].includes(e.key)){keys[e.key]=true;e.preventDefault()}});
 addEventListener('keyup',e=>{keys[e.key]=false});
 for(const id of ['left','right','fire']){const b=S(id);b.addEventListener('pointerdown',e=>{keys[id]=true;b.setPointerCapture(e.pointerId)});b.addEventListener('pointerup',()=>{keys[id]=false});b.addEventListener('pointercancel',()=>{keys[id]=false})}
-S('start').onclick=()=>{reset();running=true;S('start').textContent='RESTART';c.focus()};
+S('start').onclick=()=>{reset();running=true;S('start').textContent='重新开始';c.focus()};
 reset();requestAnimationFrame(loop);
 </script>`;
 
-const arcade = `root = Col([Title("Neon Invaders", "lg"), Text("A tiny retro shooter. Clear each wave before the invaders land; every wave is faster than the last.", "sm", "muted"), HtmlView(${JSON.stringify(arcadeHtml)}, null, "Neon Invaders")], 3)`;
+const arcade = `root = Col([Title("霓虹入侵者", "lg"), Text("一款迷你复古射击游戏。敌人降落前清除当前波次；每一波都会变得更快。", "sm", "muted"), HtmlView(${JSON.stringify(arcadeHtml)}, null, "霓虹入侵者")], 3)`;
 
 export const toolPrograms: ToolProgram[] = [
   {
     id: "recipe",
     example: "recipe",
-    title: "Sunday roast",
-    prompt: "Plan a Sunday roast for friends, with a shopping list",
-    note: "A guest stepper rescales the shopping list (@Each, @Clamp, @Format); tick items and steps with @Toggle; @CopyToClipboard with @Join.",
+    title: "周日烤肉",
+    prompt: "为朋友安排一顿周日烤肉，并准备购物清单",
+    note: "人数调节器会按比例调整购物清单（@Each、@Clamp、@Format）；可用 @Toggle 勾选食材和步骤，并通过 @Join 与 @CopyToClipboard 复制清单。",
     code: roast,
   },
   {
     id: "bill",
     example: "bill",
-    title: "Split the bill",
-    prompt: "Make a bill splitter for dinner with friends",
-    note: "Add and remove people and items (@Append, @Remove); who shared what with @Update and @Toggle; tax and tip; @Allocate keeps the cents adding up; copy the split.",
+    title: "分摊账单",
+    prompt: "制作一个与朋友聚餐时使用的账单分摊工具",
+    note: "通过 @Append 和 @Remove 添加或移除用餐人及项目；用 @Update 和 @Toggle 选择分摊人；设置税费和小费；@Allocate 确保金额分币后总额一致；复制分账结果。",
     code: bill,
   },
   {
     id: "monty",
     example: "monty",
-    title: "The Monty Hall problem",
-    prompt: "Explain the Monty Hall problem with an interactive game",
-    note: "Pick a door: @Random inside @Set hides the car and opens a goat door. Switch or stay, and simulate 1,000 games with @Range and @Each.",
+    title: "蒙提霍尔问题",
+    prompt: "通过互动游戏解释蒙提霍尔问题",
+    note: "选择一扇门：@Set 中的 @Random 随机放置汽车并打开一扇有山羊的门。你可以选择换门或坚持，并通过 @Range 和 @Each 模拟 1,000 局。",
     code: monty,
   },
   {
     id: "savings",
     example: "savings",
-    title: "Retirement savings",
-    prompt: "Help me explore how my retirement savings could grow",
-    note: "@Each over @Range builds the yearly balance with @Pow; four sliders drive the chart, the totals and the $1 million milestone.",
+    title: "退休储蓄",
+    prompt: "帮我探索退休储蓄的增长情况",
+    note: "通过 @Range 和 @Each 使用 @Pow 计算逐年余额；四个滑块会同步更新图表、总额和 100 万美元里程碑。",
     code: savings,
   },
   {
     id: "gdp-explained",
     example: "gdp",
-    title: "GDP, explained",
-    prompt: "How does GDP work? Let me explore an economy",
-    note: "Four sliders; the bar and legend come from one parts list with @Each; negative net exports explain themselves; a knowledge check.",
+    title: "GDP 详解",
+    prompt: "GDP 如何运作？让我探索一个经济体",
+    note: "通过四个滑块调整经济指标；@Each 从同一份数据生成分段条和图例；净出口为负时显示说明，并附带知识测验。",
     code: gdp,
   },
   {
     id: "clt",
     example: "clt",
-    title: "Central limit theorem",
-    prompt: "Help me understand the central limit theorem intuitively",
-    note: "Draw samples with @Random inside @Set; @Histogram and @Stats show the means narrowing like 1/√n for three populations.",
+    title: "中心极限定理",
+    prompt: "用直观的方式帮我理解中心极限定理",
+    note: "在 @Set 中通过 @Random 抽取样本；@Histogram 和 @Stats 展示三种总体下均值分布如何按 1/√n 收窄。",
     code: clt,
   },
   {
     id: "bicycle",
     example: "bicycle",
-    title: "A 7-speed bike",
-    prompt: "Break down the design of a 7-speed bike",
-    note: "A gear slider drives an Svg of seven sprockets (@Each over @Range, index access), the ratio and the speed at a cadence.",
+    title: "7 速自行车",
+    prompt: "介绍 7 速自行车的结构设计",
+    note: "档位滑块会驱动由七个飞轮片组成的 Svg（@Range、@Each 和索引访问），并更新齿比与对应踏频下的速度。",
     code: bicycle,
   },
   {
     id: "bike-repair",
     example: "bike-repair",
-    title: "Assemble a youth bike",
-    prompt: "Help me assemble a youth bicycle, step by step",
-    note: "Tap steps to tick them (@Toggle on indexes) with a progress bar; the brake type rewrites one step; the inseam sets the saddle height.",
+    title: "组装青少年自行车",
+    prompt: "一步一步指导我组装一辆青少年自行车",
+    note: "点击步骤即可勾选（按索引使用 @Toggle）并更新进度条；刹车类型会改变对应步骤；腿内侧长度用于估算坐垫高度。",
     code: bikeRepair,
   },
   {
     id: "route",
     example: "route",
-    title: "San Francisco in a day",
-    prompt: "Plan a sightseeing route in San Francisco",
-    note: "Map markers from @Each with a street route; the pace rescales the schedule (@Cumulative, @Pad); a pin or a row selects the stop.",
+    title: "旧金山一日游",
+    prompt: "规划旧金山观光路线",
+    note: "通过 @Each 生成地图标记和驾车路线；节奏选项会重新安排时间表（@Cumulative、@Pad）；点击地图标记或行程项可选择站点。",
     code: route,
   },
   {
     id: "roadtrip",
     example: "roadtrip",
-    title: "Pacific Northwest road trip",
-    prompt: "Plan a ten-day road trip through the Pacific Northwest",
-    note: "Nine stops on a driving route; tap a day to select its stop; the budget tier and traveler stepper recompute the totals and the chart.",
+    title: "太平洋西北自驾游",
+    prompt: "规划一趟为期十天的太平洋西北自驾游",
+    note: "路线包含九个站点；点击某一天即可选中对应地点；调整预算档位和出行人数后，总额和图表会自动更新。",
     code: roadtrip,
   },
   {
     id: "room",
     example: "room",
-    title: "Find your paint color",
-    prompt: "Help me choose a new paint color for my living room",
-    note: "Three answers score six colors (@Includes, @Sort, @Take); the room Svg takes the picked color, the sofa and a light tint over the top.",
+    title: "挑选墙面颜色",
+    prompt: "帮我为客厅挑选一种新的墙面颜色",
+    note: "根据三个回答为六种颜色评分（@Includes、@Sort、@Take）；房间 Svg 会显示所选墙色、沙发和叠加光线效果。",
     code: room,
   },
   {
     id: "origami",
     example: "origami",
-    title: "Fold an origami fox",
-    prompt: "Show me how to fold an origami baby fox",
-    note: "Six Svg diagrams in a list; Back and Next step through them with @Clamp, and the thumbnails jump to a step.",
+    title: "折一只狐狸折纸",
+    prompt: "教我如何折一只小狐狸折纸",
+    note: "列表中包含六张 Svg 折纸示意图；通过 @Clamp 控制上一步和下一步，点击缩略图可跳到对应步骤。",
     code: origami,
   },
   {
     id: "garden",
     example: "garden",
-    title: "Plan a vegetable garden",
-    prompt: "Help me plan a small backyard vegetable garden",
-    note: "Bed size and sun sliders, crop chips with @Toggle; a square-foot Grid with $w columns, a sun warning, a summary Table and a checklist.",
+    title: "规划菜园",
+    prompt: "帮我规划一个小型后院菜园",
+    note: "通过滑块设置种植床尺寸和日照；用 @Toggle 选择作物；Grid 根据 $w 列数生成方格种植布局，并显示日照提醒、摘要表格和清单。",
     code: garden,
   },
   {
     id: "wardrobe",
     example: "wardrobe",
-    title: "Capsule wardrobe",
-    prompt: "Build me a versatile capsule wardrobe for a week away",
-    note: "Trip length and weather rebuild the packing list (@Concat, @Take) and the day-by-day outfits (modulo indexes); a packing checklist.",
+    title: "胶囊衣橱",
+    prompt: "为一周旅行搭配一套百搭胶囊衣橱",
+    note: "旅行天数和天气会重新生成行李清单（@Concat、@Take）及每日穿搭（取模索引）；附带行李勾选清单。",
     code: wardrobe,
   },
   {
     id: "drones",
     example: "drones",
-    title: "The drone photography market",
-    prompt: "Help me understand the drone photography market",
-    note: "Segments, a market-size Chart and a players Table; four sliders run a business model with profit, margin and break-even.",
+    title: "无人机摄影市场",
+    prompt: "帮我了解无人机摄影市场",
+    note: "展示市场细分、市场规模图表和参与者表格；通过四个滑块探索业务模型的利润、利润率和盈亏平衡点。",
     code: drones,
   },
   {
     id: "game",
     example: "game",
-    title: "A retro arcade game",
-    prompt: "Make a retro arcade game I can play here",
-    note: "HtmlView runs a canvas space shooter with keyboard and on-screen controls, in the sandboxed iframe.",
+    title: "复古街机游戏",
+    prompt: "制作一款可以直接游玩的复古街机游戏",
+    note: "HtmlView 在沙箱 iframe 中运行 canvas 太空射击游戏，支持键盘和屏幕按钮操作。",
     code: arcade,
   },
   {
     id: "dash-sales",
     example: "dash-sales",
-    title: "Sales dashboard",
-    prompt: "Build a live sales dashboard for the last 90 days: revenue, orders, average order value, revenue by week and by region, and the top products.",
-    note: "Query(get_orders) with channel and period filters; @Bucket, @Cumulative, @Change, @GroupBy, @Pivot and @Top.",
+    title: "销售仪表盘",
+    prompt: "构建最近 90 天的销售仪表盘，展示销售额、订单数、平均订单金额、按周和地区统计的销售额，以及热销商品。",
+    note: "通过 Query(get_orders) 获取数据并按渠道和时间筛选；使用 @Bucket、@Cumulative、@Change、@GroupBy、@Pivot 和 @Top 处理数据。",
     code: sales,
   },
   {
     id: "dash-support",
     example: "dash-support",
-    title: "Support dashboard",
-    prompt: "Make a support dashboard: open tickets, median resolution time, tickets by week, the slowest teams and satisfaction.",
-    note: "Query(get_tickets); weekly opened vs solved with @Bucket and @Between; @Stats, @Histogram, @MovingAvg; the oldest waiting tickets.",
+    title: "客服仪表盘",
+    prompt: "制作客服仪表盘，展示未结工单、处理时长中位数、每周工单数、处理最慢的团队和满意度。",
+    note: "通过 Query(get_tickets) 获取工单；使用 @Bucket 和 @Between 对比每周新建与已解决工单；用 @Stats、@Histogram、@MovingAvg 分析处理时长，并列出等待最久的工单。",
     code: support,
   },
 ];
