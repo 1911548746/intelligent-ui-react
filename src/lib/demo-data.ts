@@ -23,13 +23,13 @@ export const demoToolSpecs: ToolSpec[] = [
             type: "object",
             properties: {
               id: { type: "string" },
-              date: { type: "string", description: "YYYY-MM-DD" },
-              region: { type: "string", enum: ["North", "South", "East", "West"] },
-              channel: { type: "string", enum: ["Web", "Mobile", "Retail"] },
+              date: { type: "string", description: "YYYY-MM-DD 日期格式。" },
+              region: { type: "string", enum: ["北部", "南部", "东部", "西部"] },
+              channel: { type: "string", enum: ["网页", "移动端", "线下门店"] },
               category: { type: "string" },
               product: { type: "string" },
               units: { type: "number" },
-              amount: { type: "number", description: "Order total in USD" },
+              amount: { type: "number", description: "订单总金额，单位为 USD。" },
             },
           },
         },
@@ -49,12 +49,12 @@ export const demoToolSpecs: ToolSpec[] = [
             type: "object",
             properties: {
               id: { type: "string" },
-              opened: { type: "string", description: "YYYY-MM-DD" },
-              team: { type: "string", enum: ["Billing", "Technical", "Accounts", "Shipping"] },
-              priority: { type: "string", enum: ["low", "normal", "high", "urgent"] },
-              status: { type: "string", enum: ["open", "pending", "solved"] },
-              hours: { type: "number", description: "Hours to resolve" },
-              csat: { type: "number", description: "Satisfaction 1 to 5" },
+              opened: { type: "string", description: "YYYY-MM-DD 日期格式。" },
+              team: { type: "string", enum: ["账单", "技术", "账户", "物流"] },
+              priority: { type: "string", enum: ["低", "普通", "高", "紧急"] },
+              status: { type: "string", enum: ["未处理", "待跟进", "已解决"] },
+              hours: { type: "number", description: "解决工单所需小时数。" },
+              csat: { type: "number", description: "满意度评分，范围为 1 至 5。" },
             },
           },
         },
@@ -73,8 +73,8 @@ export const demoToolSpecs: ToolSpec[] = [
           items: {
             type: "object",
             properties: {
-              date: { type: "string", description: "YYYY-MM-DD" },
-              source: { type: "string", enum: ["Search", "Social", "Email", "Direct", "Referral"] },
+              date: { type: "string", description: "YYYY-MM-DD 日期格式。" },
+              source: { type: "string", enum: ["搜索", "社交媒体", "邮件", "直接访问", "引荐"] },
               visits: { type: "number" },
               signups: { type: "number" },
             },
@@ -120,18 +120,18 @@ const weekday = (date: string) => new Date(`${date}T00:00:00Z`).getUTCDay();
 const growth = (date: string) => 1 + (Date.parse(date) / DAY - 20000) / 1500;
 
 const PRODUCTS = [
-  { product: "Trail runner", category: "Outdoors", price: 128 },
-  { product: "Rain shell", category: "Outdoors", price: 164 },
-  { product: "Camp stove", category: "Outdoors", price: 89 },
-  { product: "Linen shirt", category: "Apparel", price: 58 },
-  { product: "Wool sweater", category: "Apparel", price: 96 },
-  { product: "Everyday tee", category: "Apparel", price: 24 },
-  { product: "Ceramic mug set", category: "Home", price: 36 },
-  { product: "Oak side table", category: "Home", price: 210 },
-  { product: "Throw blanket", category: "Home", price: 72 },
-  { product: "Wireless earbuds", category: "Electronics", price: 149 },
-  { product: "Smart lamp", category: "Electronics", price: 64 },
-  { product: "Portable speaker", category: "Electronics", price: 119 },
+  { product: "越野跑鞋", category: "户外", price: 128 },
+  { product: "防雨外套", category: "户外", price: 164 },
+  { product: "露营炉具", category: "户外", price: 89 },
+  { product: "亚麻衬衫", category: "服饰", price: 58 },
+  { product: "羊毛毛衣", category: "服饰", price: 96 },
+  { product: "日常 T 恤", category: "服饰", price: 24 },
+  { product: "陶瓷马克杯套装", category: "家居", price: 36 },
+  { product: "橡木边桌", category: "家居", price: 210 },
+  { product: "盖毯", category: "家居", price: 72 },
+  { product: "无线耳机", category: "电子产品", price: 149 },
+  { product: "智能台灯", category: "电子产品", price: 64 },
+  { product: "便携音箱", category: "电子产品", price: 119 },
 ] as const;
 
 function orders(input: unknown) {
@@ -142,11 +142,11 @@ function orders(input: unknown) {
     return Array.from({ length: count }, (_, i) => {
       const p = pick(r, PRODUCTS, [9, 5, 4, 8, 5, 10, 6, 2, 4, 6, 5, 4]);
       const units = pick(r, [1, 1, 1, 2, 2, 3, 4]);
-      const channel = pick(r, ["Web", "Mobile", "Retail"] as const, [5, 3 * growth(date), 2]);
+      const channel = pick(r, ["网页", "移动端", "线下门店"] as const, [5, 3 * growth(date), 2]);
       return {
         id: `${date.replaceAll("-", "")}-${i + 1}`,
         date,
-        region: pick(r, ["North", "South", "East", "West"] as const, [3, 2, 3, 4]),
+        region: pick(r, ["北部", "南部", "东部", "西部"] as const, [3, 2, 3, 4]),
         channel,
         category: p.category,
         product: p.product,
@@ -164,12 +164,12 @@ function tickets(input: unknown) {
     const age = all.length - 1 - d;
     const count = Math.round(6 + r() * 10);
     return Array.from({ length: count }, (_, i) => {
-      const team = pick(r, ["Billing", "Technical", "Accounts", "Shipping"] as const, [3, 5, 2, 3]);
-      const priority = pick(r, ["low", "normal", "high", "urgent"] as const, [3, 6, 3, 1]);
-      const base = { Billing: 9, Technical: 22, Accounts: 6, Shipping: 14 }[team] * { low: 1.6, normal: 1, high: 0.6, urgent: 0.3 }[priority];
+      const team = pick(r, ["账单", "技术", "账户", "物流"] as const, [3, 5, 2, 3]);
+      const priority = pick(r, ["低", "普通", "高", "紧急"] as const, [3, 6, 3, 1]);
+      const base = { 账单: 9, 技术: 22, 账户: 6, 物流: 14 }[team] * { 低: 1.6, 普通: 1, 高: 0.6, 紧急: 0.3 }[priority];
       const hours = Math.round(base * (0.4 + r() * 1.6) * 10) / 10;
       const solved = age * 24 > hours * 1.5 || r() < 0.2;
-      const status = solved ? "solved" : r() < 0.6 ? "open" : "pending";
+      const status = solved ? "已解决" : r() < 0.6 ? "未处理" : "待跟进";
       const csat = Math.min(5, Math.max(1, Math.round(5.4 - hours / 14 - r() * 1.8)));
       return {
         id: `T-${date.replaceAll("-", "").slice(2)}${String(i + 1).padStart(2, "0")}`,
@@ -184,7 +184,7 @@ function tickets(input: unknown) {
 }
 
 function traffic(input: unknown) {
-  const sources = { Search: [1800, 0.021], Social: [950, 0.012], Email: [420, 0.045], Direct: [700, 0.03], Referral: [300, 0.035] } as const;
+  const sources = { 搜索: [1800, 0.021], 社交媒体: [950, 0.012], 邮件: [420, 0.045], 直接访问: [700, 0.03], 引荐: [300, 0.035] } as const;
   return lastDays(input).flatMap((date) => {
     const r = rng(`traffic:${date}`);
     const weekend = weekday(date) === 0 || weekday(date) === 6;
