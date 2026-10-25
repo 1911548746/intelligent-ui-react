@@ -106,7 +106,7 @@ export const Badge = defineComponent({
 export const Link = defineComponent({
   name: "Link",
   props: z.object({ text: z.string(), url: z.string() }),
-  description: "Opens an http(s) URL in a new tab.",
+  description: "在新标签页打开 http(s) URL。",
   component: ({ props }) => {
     const href = webUrl(props.url);
     if (!href) return <span>{str(props.text)}</span>;

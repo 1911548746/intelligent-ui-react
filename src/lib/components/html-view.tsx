@@ -74,9 +74,9 @@ export const HtmlView = defineComponent({
     return (
       <div ref={box} className="iui-html-view" style={{ height }}>
         {streaming ? (
-          <div className="iui-html-view-wait">Preparing the interactive view…</div>
+          <div className="iui-html-view-wait">正在准备互动界面…</div>
         ) : (
-          <iframe ref={frame} title={props.title || "Interactive view"} sandbox="allow-scripts" srcDoc={srcDoc} referrerPolicy="no-referrer" loading="lazy" />
+          <iframe ref={frame} title={props.title || "互动界面"} sandbox="allow-scripts" srcDoc={srcDoc} referrerPolicy="no-referrer" loading="lazy" />
         )}
       </div>
     );

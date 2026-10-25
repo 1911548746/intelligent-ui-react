@@ -28,7 +28,7 @@ function makeFormat(kind: string | undefined, currency: string | undefined): For
     if (kind === "percent") return `${Number(value.toFixed(compact ? 1 : 2))}%`;
     const big = Math.abs(value) >= (compact ? 1000 : 1e6);
     const options: Intl.NumberFormatOptions = { minimumFractionDigits: 0, maximumFractionDigits: compact && big ? 1 : 2, ...(big ? { notation: "compact" } : {}) };
-    return value.toLocaleString("en-US", kind === "currency" ? { ...options, style: "currency", currency: code } : options);
+    return value.toLocaleString("zh-CN", kind === "currency" ? { ...options, style: "currency", currency: code } : options);
   };
 }
 
@@ -101,7 +101,7 @@ function Cartesian({ spec, width }: { spec: Spec; width: number }) {
   const tip = hover === null ? null : rows[hover];
   return (
     <div className="iui-chart-plot" style={{ height }}>
-      <svg width={width} height={height} role="img" aria-label={`${type} chart of ${series.join(", ")} by ${x}`} onPointerMove={onMove} onPointerLeave={() => setHover(null)}>
+      <svg width={width} height={height} role="img" aria-label={`${type} 图表：按 ${x} 展示 ${series.join("、")}`} onPointerMove={onMove} onPointerLeave={() => setHover(null)}>
         <defs>
           {series.map((s, si) => (
             <linearGradient key={s} id={`${gradient}-${si}`} x1="0" x2="0" y1="0" y2="1">
@@ -200,14 +200,14 @@ function Scatter({ spec, width }: { spec: Spec; width: number }) {
   const tip = hover && rows[hover.i];
   return (
     <div className="iui-chart-plot" style={{ height }}>
-      <svg width={width} height={height} role="img" aria-label={`scatter chart of ${series.join(", ")} by ${x}`} onPointerLeave={() => setHover(null)}>
+      <svg width={width} height={height} role="img" aria-label={`散点图：按 ${x} 展示 ${series.join("、")}`} onPointerLeave={() => setHover(null)}>
         {ya.ticks.map((t) => (
           <g key={`y${t}`}>
             <line x1={pad.left} x2={pad.left + w} y1={py(t)} y2={py(t)} className="iui-chart-grid" strokeDasharray="3 4" />
             <text x={pad.left - 10} y={py(t) + 4} textAnchor="end" className="iui-chart-tick">{format(t, true)}</text>
           </g>
         ))}
-        {xa.ticks.map((t, k) => (k % every === 0 ? <text key={`x${t}`} x={px(t)} y={height - 6} textAnchor="middle" className="iui-chart-tick">{Number(t.toFixed(6)).toLocaleString("en-US", { notation: Math.abs(t) >= 1e4 ? "compact" : "standard" })}</text> : null))}
+        {xa.ticks.map((t, k) => (k % every === 0 ? <text key={`x${t}`} x={px(t)} y={height - 6} textAnchor="middle" className="iui-chart-tick">{Number(t.toFixed(6)).toLocaleString("zh-CN", { notation: Math.abs(t) >= 1e4 ? "compact" : "standard" })}</text> : null))}
         {series.map((s, si) =>
           rows.map((r, i) => (
             <circle key={`${si}-${i}`} cx={px(num(r[x]))} cy={py(num(r[s]))} r={hover?.i === i && hover.si === si ? 6.5 : 5} fill={seriesColor(si)} fillOpacity={0.78} stroke="var(--iui-canvas)" strokeWidth={1.5} onPointerEnter={() => setHover({ i, si })} />
@@ -217,7 +217,7 @@ function Scatter({ spec, width }: { spec: Spec; width: number }) {
       {tip && hover && (
         <div className="iui-chart-tooltip" style={{ left: Math.min(Math.max(px(num(tip[x])), 70), width - 70), top: Math.max(0, py(num(tip[series[hover.si]])) - 70) }}>
           <strong>{name ? String(tip[name]) : series[hover.si]}</strong>
-          <span>{x} <b>{num(tip[x]).toLocaleString("en-US", { maximumFractionDigits: 2 })}</b></span>
+          <span>{x} <b>{num(tip[x]).toLocaleString("zh-CN", { maximumFractionDigits: 2 })}</b></span>
           <span><i style={{ background: seriesColor(hover.si) }} />{series[hover.si]} <b>{format(num(tip[series[hover.si]]))}</b></span>
         </div>
       )}
@@ -236,7 +236,7 @@ function Pie({ spec, width }: { spec: Spec; width: number }) {
   const point = (radius: number, a: number) => `${(r + radius * Math.cos(a)).toFixed(2)},${(r + radius * Math.sin(a)).toFixed(2)}`;
   return (
     <div className="iui-pie">
-      <svg width={size} height={size} role="img" aria-label={`${spec.type} chart of ${key ?? "values"} by ${spec.x}`}>
+      <svg width={size} height={size} role="img" aria-label={`${spec.type === "donut" ? "环形图" : "饼图"}：按 ${spec.x} 展示 ${key ?? "数值"}`}>
         {items.map((item, i) => {
           const sweep = (item.value / total) * Math.PI * 2;
           const a0 = angle;

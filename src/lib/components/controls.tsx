@@ -34,7 +34,7 @@ function useFieldName(label: unknown, statementId?: string) {
 
 const numberText = (value: unknown) => {
   if (typeof value !== "number" || !Number.isFinite(value)) return "";
-  return value.toLocaleString("en-US", { maximumFractionDigits: 2 });
+  return value.toLocaleString("zh-CN", { maximumFractionDigits: 2 });
 };
 
 function Field({ label, children: content }: { label?: string; children: ReactNode }) {
@@ -246,7 +246,7 @@ export const Select = defineComponent({
         <select className="iui-input iui-select" value={value} aria-label={props.label ? undefined : props.placeholder} onChange={(event) => field.setValue(event.target.value)}>
           {(props.placeholder || !choices.some((o) => o.value === value)) && (
             <option value="" disabled>
-              {props.placeholder ?? "Choose…"}
+              {props.placeholder ?? "请选择…"}
             </option>
           )}
           {choices.map((o, i) => (
@@ -326,7 +326,7 @@ export const Slider = defineComponent({
           max={max}
           step={step}
           value={value}
-          aria-label={props.label ? undefined : "Value"}
+          aria-label={props.label ? undefined : "数值"}
           aria-valuetext={readout}
           onChange={(event) => field.setValue(Number(event.target.value))}
         />
@@ -423,7 +423,7 @@ export const DatePicker = defineComponent({
           value={value}
           min={props.min && DATE.test(props.min) ? props.min : undefined}
           max={props.max && DATE.test(props.max) ? props.max : undefined}
-          aria-label={props.label ? undefined : "Date"}
+          aria-label={props.label ? undefined : "日期"}
           onChange={(event) => field.setValue(event.target.value)}
         />
       </Field>
@@ -480,7 +480,7 @@ export const Timer = defineComponent({
     };
     const done = left === 0 && startedAt !== null;
     return (
-      <div className={cx("iui-timer", running && "is-running", done && "is-done")} role="timer" aria-label={props.label || "Timer"}>
+      <div className={cx("iui-timer", running && "is-running", done && "is-done")} role="timer" aria-label={props.label || "计时器"}>
         <div className="iui-timer-read">
           {props.label && <span className="iui-label">{props.label}</span>}
           <span className="iui-timer-time">{clock(left)}</span>
@@ -488,11 +488,11 @@ export const Timer = defineComponent({
         <div className="iui-timer-actions">
           <button type="button" className="iui-button iui-button-solid iui-button-sm" disabled={streaming || left === 0} onClick={toggle}>
             <Glyph name={running ? "pause" : "play"} size={14} />
-            {running ? "Pause" : startedAt === null || left === 0 ? "Start" : "Resume"}
+            {running ? "暂停" : startedAt === null || left === 0 ? "开始" : "继续"}
           </button>
           <button type="button" className="iui-button iui-button-ghost iui-button-sm" disabled={streaming || startedAt === null} onClick={reset}>
             <Glyph name="rotate-ccw" size={14} />
-            Reset
+            重置
           </button>
         </div>
       </div>

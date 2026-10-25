@@ -24,7 +24,7 @@ export const Table = defineComponent({
       return cells.length > 0 && cells.every((v) => typeof v === "number" || (typeof v === "string" && NUMERIC.test(v.trim())));
     });
     const cell = (value: unknown) =>
-      isElement(value) ? renderNode(value) : typeof value === "number" ? value.toLocaleString("en-US", { maximumFractionDigits: 2 }) : inline(String(value ?? ""));
+      isElement(value) ? renderNode(value) : typeof value === "number" ? value.toLocaleString("zh-CN", { maximumFractionDigits: 2 }) : inline(String(value ?? ""));
     return (
       <div className="iui-table-scroll">
         <table className="iui-table">

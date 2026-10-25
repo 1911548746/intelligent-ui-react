@@ -51,12 +51,12 @@ export const Carousel = defineComponent({
           ))}
         </div>
         {!edges.start && (
-          <button type="button" className="iui-carousel-nav is-prev" aria-label="Previous" onClick={() => page(-1)}>
+          <button type="button" className="iui-carousel-nav is-prev" aria-label="上一项" onClick={() => page(-1)}>
             <ChevronLeft size={18} />
           </button>
         )}
         {!edges.end && (
-          <button type="button" className="iui-carousel-nav is-next" aria-label="Next" onClick={() => page(1)}>
+          <button type="button" className="iui-carousel-nav is-next" aria-label="下一项" onClick={() => page(1)}>
             <ChevronRight size={18} />
           </button>
         )}
@@ -138,9 +138,9 @@ export const Code = defineComponent({
       <div className="iui-codeblock">
         <div className="iui-codeblock-head">
           <span>{str(props.language) || "code"}</span>
-          <button type="button" onClick={copy} aria-label="Copy code">
+          <button type="button" onClick={copy} aria-label="复制代码">
             {copied ? <Check size={14} /> : <Copy size={14} />}
-            {copied ? "Copied" : "Copy"}
+            {copied ? "已复制" : "复制"}
           </button>
         </div>
         <pre>
@@ -189,7 +189,7 @@ export const YouTube = defineComponent({
       <div className="iui-video">
         <iframe
           src={`https://www.youtube-nocookie.com/embed/${id}`}
-          title={str(props.title) || "YouTube video"}
+          title={str(props.title) || "YouTube 视频"}
           loading="lazy"
           allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen"
           referrerPolicy="strict-origin-when-cross-origin"
@@ -213,7 +213,7 @@ export const Flashcard = defineComponent({
         <span className="iui-flashcard-inner">
           <span className="iui-flashcard-face is-front" aria-hidden={flipped}>
             {face(props.front)}
-            <span className="iui-flashcard-hint">{str(props.hint) || "Tap to flip"}</span>
+            <span className="iui-flashcard-hint">{str(props.hint) || "点击翻面"}</span>
           </span>
           <span className="iui-flashcard-face is-back" aria-hidden={!flipped}>
             {face(props.back)}

@@ -252,9 +252,9 @@ export const MapView = defineComponent({
       return () => cancelAnimationFrame(frame);
     }, [expanded]);
 
-    const routeNote = routeKind === "street" ? "The line follows streets (OSRM / OpenStreetMap, driving profile); it is an overview, not turn-by-turn directions."
-      : routeKind === "none" ? "" : "The line joins the places in order. Street routing is loading or unavailable.";
-    const routeStatus = { street: "Street route loaded.", overview: "Street routing unavailable. Showing direct connections.", loading: "Street route loading.", none: "" }[routeKind];
+    const routeNote = routeKind === "street" ? "路线沿道路绘制（OSRM / OpenStreetMap，驾车方案）；这是路线概览，不提供逐向导航。"
+      : routeKind === "none" ? "" : "路线按顺序连接各地点；道路路线仍在加载或暂不可用。";
+    const routeStatus = { street: "道路路线已加载。", overview: "道路路线暂不可用，当前显示直线连接。", loading: "正在加载道路路线。", none: "" }[routeKind];
 
     return (
       <div className="iui-map-slot" style={{ minHeight: height }}>
@@ -264,30 +264,30 @@ export const MapView = defineComponent({
           style={expanded ? undefined : { height }}
           role={expanded ? "dialog" : "region"}
           aria-modal={expanded || undefined}
-          aria-label="Map"
+          aria-label="地图"
           tabIndex={expanded ? -1 : undefined}
         >
           <div className="iui-map-surface" ref={surface} />
           <div className="iui-map-top-left">
             {categories.length > 1 && (
               <label className="iui-map-pill iui-map-filter">
-                <select aria-label="Filter places" value={group} onChange={(event) => setGroup(event.target.value)}>
-                  <option value="all">All places</option>
+                <select aria-label="筛选地点" value={group} onChange={(event) => setGroup(event.target.value)}>
+                  <option value="all">全部地点</option>
                   {categories.map((category) => <option key={category} value={category}>{category}</option>)}
                 </select>
                 <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg>
               </label>
             )}
-            <button className="iui-map-pill iui-map-recenter" type="button" aria-label="Show every place" onClick={() => {
+            <button className="iui-map-pill iui-map-recenter" type="button" aria-label="显示所有地点" onClick={() => {
               if (fitPoints.current.length) map.current?.fitBounds(boundsOf(fitPoints.current), { padding: { top: 55, left: 34, bottom: 35, right: 40 }, maxZoom: 14 });
             }}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true"><path d="m4.5 4.5 15 5a1 1 0 0 1 0 1.9l-6.1 2-2 6.1a1 1 0 0 1-1.9 0l-5-15z"/></svg></button>
-            <button className="iui-map-info" type="button" aria-label="About this map" aria-expanded={infoOpen} onClick={() => setInfoOpen(!infoOpen)}><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><circle cx="10" cy="10" r="7"/><path d="M10 9v5"/><circle cx="10" cy="6.3" r=".6" fill="currentColor" stroke="none"/></svg></button>
+            <button className="iui-map-info" type="button" aria-label="关于此地图" aria-expanded={infoOpen} onClick={() => setInfoOpen(!infoOpen)}><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><circle cx="10" cy="10" r="7"/><path d="M10 9v5"/><circle cx="10" cy="6.3" r=".6" fill="currentColor" stroke="none"/></svg></button>
           </div>
-          <button className="iui-map-pill iui-map-expand" type="button" aria-expanded={expanded} onClick={() => setExpanded(!expanded)}>{expanded ? "Collapse" : "Expand"}<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true"><path d="M12 4h4v4M8 16H4v-4M16 12v4h-4M4 8V4h4"/></svg></button>
-          {infoOpen && <div className="iui-map-note">Drag to explore and use + and − to zoom. Select a place to highlight it. {routeNote}</div>}
-          {routeKind === "overview" && <div className="iui-map-overview">Route overview</div>}
+          <button className="iui-map-pill iui-map-expand" type="button" aria-expanded={expanded} onClick={() => setExpanded(!expanded)}>{expanded ? "收起" : "展开"}<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true"><path d="M12 4h4v4M8 16H4v-4M16 12v4h-4M4 8V4h4"/></svg></button>
+          {infoOpen && <div className="iui-map-note">拖动地图以浏览，使用 + 和 − 缩放。选择地点可突出显示。{routeNote}</div>}
+          {routeKind === "overview" && <div className="iui-map-overview">路线概览</div>}
           <span className="iui-map-status" role="status">{routeStatus}</span>
-          {mapError && <div className="iui-map-error" role="status">Map tiles are temporarily unavailable. The places are still shown.</div>}
+          {mapError && <div className="iui-map-error" role="status">地图底图暂时不可用，但地点标记仍会显示。</div>}
         </div>
       </div>
     );
