@@ -19,6 +19,7 @@ export default defineConfig({
       // Keep production settings in source control so cf deploy preserves them.
       LLM_BASE_URL: bindings.text("https://api.siliconflow.cn/v1"),
       LLM_MODEL: bindings.text("deepseek-ai/DeepSeek-V4.1-Flash"),
+      LLM_ENABLE_THINKING: bindings.text("false"),
       LLM_REASONING_EFFORT: bindings.text("low"),
       // Set the value as a Secret in the Worker Dashboard, never in this file.
       LLM_API_KEY: bindings.secret(),

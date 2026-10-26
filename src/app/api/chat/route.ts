@@ -156,6 +156,7 @@ export async function POST(req: Request) {
                 model: backend.model,
                 messages: [{ role: "system", content: backend.instructions }, ...toChatMessages(input)],
                 stream: true,
+                enable_thinking: process.env.LLM_ENABLE_THINKING === "true",
                 // OpenRouter 读取 reasoning.effort；其他 OpenAI-compatible 服务通常读取 reasoning_effort。
                 ...(effort ? { reasoning_effort: effort, reasoning: { effort } } : {}),
               } as ChatCompletionCreateParamsStreaming,
