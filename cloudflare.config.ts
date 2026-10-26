@@ -7,7 +7,7 @@ export default defineConfig({
     compatibilityDate: "2026-10-25",
     compatibilityFlags: ["nodejs_compat"],
     // Match the existing Worker's Dashboard settings on the first CI deploy.
-    workersDev: false,
+    workersDev: true,
     previewUrls: false,
     assets: {
       htmlHandling: "none",
