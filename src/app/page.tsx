@@ -11,7 +11,7 @@ import {
 } from "@openuidev/react-ui";
 import type { ActionEvent } from "@openuidev/react-lang";
 import { useEffect } from "react";
-import { Brain, Calculator, Compass, Drum, Gamepad2, MapPinned, TentTree, UtensilsCrossed } from "lucide-react";
+import { Brain, Calculator, Compass, Gamepad2, MapPinned, UtensilsCrossed, ChartNoAxesCombined, ReceiptText } from "lucide-react";
 import { runLibraryAction } from "@/lib/actions";
 import { withBase } from "@/lib/base-path";
 import { localChatStorage, SaveMessages } from "@/lib/chat-storage";
@@ -32,12 +32,12 @@ if (typeof window !== "undefined") {
 const starters = [
   { displayText: "规划一日游", prompt: "我会在上海待一天，请帮我规划观光路线", icon: <MapPinned size={16} /> },
   { displayText: "探索一座城市", prompt: "请规划一段轻松的洛杉矶半日游，安排三个停留点并附上地图", icon: <Compass size={16} /> },
-  { displayText: "寻找周末活动灵感", prompt: "请为我推荐从旧金山出发的周末短途目的地，并比较三个选择", icon: <TentTree size={16} /> },
   { displayText: "规划一顿晚餐", prompt: "请为六个人安排一顿简单的素食晚餐", icon: <UtensilsCrossed size={16} /> },
+  { displayText: "分摊一下账单", prompt: "制作一个与朋友聚餐时使用的账单分摊工具", icon: <ReceiptText size={16} /> },
+  { displayText: "制作数据看板", prompt: "构建网站流量仪表盘，展示各来源的访问量和注册量、转化率以及累计注册量。", icon: <ChartNoAxesCombined size={16} /> },
   { displayText: "制作一个计算器", prompt: "请制作一个带显示屏和按键、可以实际使用的计算器", icon: <Calculator size={16} /> },
   { displayText: "玩一款掌机游戏", prompt: "请制作一款可以玩的 Game Boy 风格掌机游戏，包含屏幕、方向键和 A/B 按钮", icon: <Gamepad2 size={16} /> },
-  { displayText: "即兴演奏", prompt: "制作一个可供演奏的鼓垫，包含若干打击垫以及一个节拍计数器", icon: <Drum size={16} /> },
-  { displayText: "参加知识问答", prompt: "请用五道有趣的知识题考考我，并记录得分", icon: <Brain size={16} /> },
+  { displayText: "趣味知识问答", prompt: "请用五道有趣的知识题考考我，并记录得分", icon: <Brain size={16} /> },
 ];
 
 const llm = fetchLLM({
